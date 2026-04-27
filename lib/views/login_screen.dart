@@ -126,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                         },
 
                         child: Text(
-                          vm.loading ? 'Loading...' : 'Login',
+                          vm.loading ? 'Loading....' : 'Login',
                         ),
                       ),
                     );
