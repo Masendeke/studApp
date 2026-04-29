@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 223, 231, 239),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -43,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // CIRCULAR LOGO (NO EXTRA SPACE)
                 CircleAvatar(
                   radius: 90,
-                  backgroundColor: Colors.white,
+                  backgroundColor: const Color.fromARGB(255, 223, 231, 239),
                   child: ClipOval(
                     child: Image.asset(
                       'assets/logo.png',
@@ -51,15 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: 950,
                       height: 150,
                     ),
-                  ),
-                ),
-
-                const Text(
-                  "University IT Assistant",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
 
@@ -137,6 +129,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
 
                       const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                        onPressed: () {
+                        // navigate to forgot password screen
+                        },
+                                             child: const Text(
+                        
+                                             "Forgot Password?",
+                        style: TextStyle(
+                        fontSize: 12,
+                        color: Color.fromARGB(255, 10, 61, 145),
+                         ),
+                        ),
+                                            ),
+                      ),
 
                       // PASSWORD
                       TextFormField(
@@ -187,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
+                                backgroundColor: const Color.fromARGB(255, 10, 61, 145),
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.circular(12),
