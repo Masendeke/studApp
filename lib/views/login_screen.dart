@@ -3,11 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:student_assistant_application/routes/app_routes.dart';
 import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 
-class LoginScreen extends StatelessWidget {
-  // Form key validates all fields together
-  final _formKey = GlobalKey<FormState>();
+class LoginScreen extends StatefulWidget {
 
   LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  // Form key validates all fields together
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
