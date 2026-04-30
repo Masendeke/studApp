@@ -133,11 +133,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                         onPressed: () {
+                          Navigator.pushNamed(context, AppRoutes.resetpassword);
                         // navigate to forgot password screen
                         },
-                                             child: const Text(
+                        child: const Text(
                         
-                                             "Forgot Password?",
+                        "Forgot Password?",
                         style: TextStyle(
                         fontSize: 12,
                         color: Color.fromARGB(255, 10, 61, 145),
