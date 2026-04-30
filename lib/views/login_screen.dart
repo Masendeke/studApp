@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 223, 231, 239),
+      
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // CIRCULAR LOGO (NO EXTRA SPACE)
                 CircleAvatar(
                   radius: 90,
-                  backgroundColor: const Color.fromARGB(255, 223, 231, 239),
+                  backgroundColor: Colors.white,
                   child: ClipOval(
                     child: Image.asset(
                       'assets/logo.png',
