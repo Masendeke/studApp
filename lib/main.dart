@@ -4,7 +4,6 @@ import 'package:student_assistant_application/routes/app_routes.dart';
 import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 import 'package:student_assistant_application/views/login_screen.dart';
 
-
 void main() {
   runApp(
   MultiProvider(
@@ -23,11 +22,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     initialRoute: AppRoutes.login,
+     initialRoute: AppRoutes.home,
      onGenerateRoute: AppRoutes.generateRoute,
       debugShowCheckedModeBanner: false,
       title: 'Student Assistant App',
-     
+      
+     // home: HomeView(),
     );
   }
 }
