@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:student_assistant_application/views/register_screen.dart';
+import 'package:student_assistant_application/views/reset_password_screen.dart';
 import 'package:student_assistant_application/views/admin_dashboard_screen.dart';
 import 'package:student_assistant_application/views/application_form_screen.dart';
 import 'package:student_assistant_application/views/detail_screen.dart';
@@ -11,6 +13,8 @@ class AppRoutes {
   static const String apply = '/apply';
   static const String details = '/details';
   static const String admin = '/admin';
+  static const String resetpassword = '/resetpassword';
+  static const String register = '/register';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -24,6 +28,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => Detailscreen());
       case admin:
         return MaterialPageRoute(builder: (_) => Admindashboardscreen());
+      case resetpassword: 
+        return MaterialPageRoute(builder: (_)=> ResetPasswordScreen());
+        case register:
+        return MaterialPageRoute(builder: (_) => RegisterScreen());
 
       default:
         throw Exception('Route not found');
