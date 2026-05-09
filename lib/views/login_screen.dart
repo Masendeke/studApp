@@ -4,6 +4,7 @@ import 'package:student_assistant_application/routes/app_routes.dart';
 import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 import 'register_screen.dart';
 import 'reset_password_screen.dart';
+import 'admin_dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,22 +64,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 75,
                         child: CircleAvatar(
                           child: ClipOval(
-                            child: Image.asset("assets/logo.png",
-                            fit: BoxFit.cover,
-                            ))),
+                            child: Image.asset(
+                              "assets/logo.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
+
                       const SizedBox(width: 12),
+
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "DEVELOPMENT",
                             style: TextStyle(
-                            color: Colors.white,
-                            fontSize:15,
-                            fontWeight:FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
+
                           Text(
                             "CREW",
                             style: TextStyle(
@@ -98,6 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // LOGIN FORM
                   Form(
                     key: _formKey,
+
                     child: Container(
                       width: 380,
                       padding: const EdgeInsets.all(25),
@@ -105,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(25),
+
                         boxShadow: const [
                           BoxShadow(
                             color: Colors.black26,
@@ -126,9 +135,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
 
                           const Text(
-                            "Please login in to your account",
+                            "Please login in to your student assistant account",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               color: Colors.grey,
                             ),
                           ),
@@ -138,22 +147,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           // EMAIL
                           TextFormField(
                             controller: email,
+
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Enter email";
                               }
                               return null;
                             },
+
                             decoration: InputDecoration(
                               hintText: "22404099@stud.cut.ac.za",
                               labelText: "University email",
-                              prefixIcon: const Icon(Icons.email_outlined),
-                             contentPadding: const EdgeInsets.symmetric(
-                             vertical: 18,
-                             horizontal: 15,
+                              prefixIcon:
+                                  const Icon(Icons.email_outlined),
+
+                              contentPadding:
+                                  const EdgeInsets.symmetric(
+                                vertical: 18,
+                                horizontal: 15,
                               ),
+
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius:
+                                    BorderRadius.circular(12),
                               ),
                             ),
                           ),
@@ -161,6 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // FORGOT PASSWORD
                           Align(
                             alignment: Alignment.centerRight,
+
                             child: TextButton(
                               onPressed: () {
                                 Navigator.push(
@@ -171,10 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 );
                               },
+
                               child: const Text(
                                 "Forgot Password?",
                                 style: TextStyle(
-                                  color: Color.fromARGB(255, 10, 61, 145),
+                                  color:
+                                      Color.fromARGB(255, 10, 61, 145),
                                 ),
                               ),
                             ),
@@ -184,34 +203,45 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextFormField(
                             controller: password,
                             obscureText: obscurePassword,
+
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Enter password";
                               }
                               return null;
                             },
+
                             decoration: InputDecoration(
                               hintText: "Enter password",
                               labelText: "Password",
-                              prefixIcon: const Icon(Icons.lock_outline),
-                              contentPadding: const EdgeInsets.symmetric(
-                             vertical: 18,
-                             horizontal: 15,
+
+                              prefixIcon:
+                                  const Icon(Icons.lock_outline),
+
+                              contentPadding:
+                                  const EdgeInsets.symmetric(
+                                vertical: 18,
+                                horizontal: 15,
                               ),
+
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   obscurePassword
                                       ? Icons.visibility_off
                                       : Icons.visibility,
                                 ),
+
                                 onPressed: () {
                                   setState(() {
-                                    obscurePassword = !obscurePassword;
+                                    obscurePassword =
+                                        !obscurePassword;
                                   });
                                 },
                               ),
+
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius:
+                                    BorderRadius.circular(12),
                               ),
                             ),
                           ),
@@ -222,16 +252,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             width: double.infinity,
                             height: 50,
+
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 10, 61, 145),
+                                backgroundColor:
+                                    const Color.fromARGB(
+                                        255, 10, 61, 145),
+
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius:
+                                      BorderRadius.circular(12),
                                 ),
                               ),
 
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (_formKey.currentState!
+                                    .validate()) {
                                   await context
                                       .read<AuthViewModel>()
                                       .login(
@@ -253,7 +289,45 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
-                                
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 15),
+
+                          // ADMIN DASHBOARD BUTTON
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color.fromARGB(
+                                        255, 10, 61, 145),
+
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(12),
+                                ),
+                              ),
+
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const Admindashboardscreen(),
+                                  ),
+                                );
+                              },
+
+                              child: const Text(
+                                "Admin Dashboard",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -261,9 +335,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 20),
 
-                          // REGISTER LINK (FIXED ✔ BLUE + CLICKABLE)
+                          // REGISTER LINK
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment:
+                                MainAxisAlignment.center,
+
                             children: [
                               const Text(
                                 "Don't have an account? ",
@@ -287,10 +363,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: const Text(
                                   "Register",
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 10, 61, 145),
+                                    color: Color.fromARGB(
+                                        255, 10, 61, 145),
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
+                                    decoration:
+                                        TextDecoration.underline,
                                   ),
                                 ),
                               ),
