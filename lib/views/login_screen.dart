@@ -6,9 +6,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:student_assistant_application/viewmodel/viewmodel.dart';
+import 'package:student_assistant_application/views/admin_login_screen.dart';
 import 'register_screen.dart';
 import 'reset_password_screen.dart';
-import 'admin_dashboard_screen.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -322,13 +322,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) =>
-                                      const Admindashboardscreen(),
+                                      const AdminLoginScreen(),
                                 ),
                               );
                             },
         
                             child: const Text(
-                              "Admin Dashboard",
+                              "Admin Login",
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
