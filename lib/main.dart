@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:student_assistant_application/routes/app_routes.dart';
 import 'package:student_assistant_application/viewmodel/viewmodel.dart';
-import 'package:student_assistant_application/views/login_screen.dart';
 
 
 void main() {
