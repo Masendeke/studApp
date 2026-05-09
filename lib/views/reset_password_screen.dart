@@ -31,9 +31,9 @@ class _ResetPasswordScreenState
   Widget build(BuildContext context) {
     return Scaffold(
 
-      // ✅ APP BAR WITH ARROW ONLY (NO BUTTON TEXT)
+      //  APP BAR WITH ARROW ONLY (NO BUTTON TEXT)
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 10, 61, 145),
+        backgroundColor: const Color(0xFF0B1F8F),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -46,7 +46,7 @@ class _ResetPasswordScreenState
         ),
       ),
 
-      // ✅ SAME BACKGROUND AS REGISTER / LOGIN
+      //  SAME BACKGROUND AS REGISTER / LOGIN
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -56,9 +56,9 @@ class _ResetPasswordScreenState
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromARGB(255, 10, 61, 145),
-              Color(0xFF566176),
-              Color(0xFFD9D9D9),
+             Color(0xFF0B1F8F),
+              Color(0xFF1976D2),
+              Colors.white,
             ],
           ),
         ),
@@ -194,7 +194,7 @@ class _ResetPasswordScreenState
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    const Color.fromARGB(255, 10, 61, 145),
+                                    const Color(0xFF0B1F8F),
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.circular(12),
