@@ -1,11 +1,9 @@
-
 //224043099 Masendeke CP
 //224014647 Mahlangu P
 //224125791 Khunyeli P
 //224081442 Nlati TT
 //224083089 Tshabane L
 // ignore_for_file: deprecated_member_use
-
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,147 +18,145 @@ class Admindashboardscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<StudentViewModel>(
       builder: (context, vm, _) {
-        vm.loadPersons(vm.getMockData());
+        // Load mock data if empty
+        if (vm.allPersons.isEmpty) {
+          vm.loadPersons(vm.getMockData());
+        }
 
         return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: const Text(
-              'Admin Dashboard',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.black,
+          backgroundColor: Colors.transparent,
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF0B1F8F), // Dark blue at top
+                  Color(0xFF1976D2), // Medium blue
+                  Colors.white, // White at bottom
+                ],
               ),
             ),
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-            elevation: 0,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(1),
-              child: Container(height: 1, color: Colors.grey.shade200),
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.refresh, color: Colors.black),
-                onPressed: () {
-                  vm.refreshData();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Refreshed!'),
-                      duration: Duration(seconds: 1),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.more_vert, color: Colors.black),
-                onPressed: () {},
-              ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // --- Stat cards row 1 ---
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        icon: Icons.people,
-                        iconColor: Colors.blue,
-                        value: vm.totalStudentCount.toString(),
-                        label: 'TOTAL APPS',
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _buildStatCard(
-                        icon: Icons.access_time,
-                        iconColor: Colors.orange,
-                        value: vm.pendingCount.toString(),
-                        label: 'PENDING',
-                      ),
-                    ),
-                  ],
+            child: Scaffold(
+              backgroundColor:
+                  Colors.transparent, // Make inner Scaffold transparent
+              appBar: AppBar(
+                title: const Text(
+                  'Admin Dashboard',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
                 ),
-                const SizedBox(height: 10),
-
-                // --- Stat cards row 2 ---
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        icon: Icons.check_circle,
-                        iconColor: Colors.green,
-                        value: vm.approvedCount.toString(),
-                        label: 'APPROVED',
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _buildStatCard(
-                        icon: Icons.cancel,
-                        iconColor: Colors.red,
-                        value: vm.rejectedCount.toString(),
-                        label: 'REJECTED',
-                      ),
-                    ),
-                  ],
+                backgroundColor: Colors.transparent, // Make AppBar transparent
+                foregroundColor: Colors.black,
+                elevation: 0,
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(1),
+                  child: Container(height: 1, color: Colors.grey.shade200),
                 ),
-                const SizedBox(height: 14),
-
-                const SizedBox(height: 16),
-
-                // --- Recent applications header ---
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.more_vert, color: Colors.black),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.all(14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'RECENT APPLICATIONS',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                        //letterSpacing: 0.8,
-                      ),
-                    ),
-                    TextButton.icon(
-                      onPressed: () {
-                        vm.showSearchDialog(context);
-                      },
-                      icon: const Icon(
-                        Icons.search,
-                        size: 25,
-                        color: Colors.black,
-                      ),
-                      label: const Text(
-                        'Search Students',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xFF4A90D9),
-                          fontWeight: FontWeight.w500,
+                    // --- Stat cards row 1 ---
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            icon: Icons.people,
+                            iconColor: Colors.blue,
+                            value: vm.totalStudentCount.toString(),
+                            label: 'TOTAL APPS',
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildStatCard(
+                            icon: Icons.access_time,
+                            iconColor: Colors.orange,
+                            value: vm.pendingCount.toString(),
+                            label: 'PENDING',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // --- Stat cards row 2 ---
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            icon: Icons.check_circle,
+                            iconColor: Color(0xFF1976D2),
+                            value: vm.approvedCount.toString(),
+                            label: 'APPROVED',
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildStatCard(
+                            icon: Icons.cancel,
+                            iconColor: Colors.red,
+                            value: vm.rejectedCount.toString(),
+                            label: 'REJECTED',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+
+                    const SizedBox(height: 16),
+
+                    // --- Recent applications header ---
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'RECENT APPLICATIONS',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            vm.showSearchDialog(context);
+                          },
+                          icon: const Icon(
+                            Icons.search,
+                            size: 25,
+                            color: Colors.black,
+                          ),
+                          label: const Text(
+                            'Search Students',
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // --- Application list ---
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: vm.allPersons.length,
+                      itemBuilder: (context, index) {
+                        final student = vm.allPersons[index];
+                        return _buildApplicationCard(context, vm, student);
+                      },
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-
-                // --- Application list ---
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: vm.allPersons.length,
-                  itemBuilder: (context, index) {
-                    final student = vm.allPersons[index];
-                    return _buildApplicationCard(context, vm, student);
-                  },
-                ),
-              ],
+              ),
             ),
           ),
         );
@@ -214,11 +210,7 @@ class Admindashboardscreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.05),
-            blurRadius: 4,
-            //offset: const Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.grey.withOpacity(0.05), blurRadius: 4),
         ],
       ),
       child: Column(
@@ -311,7 +303,7 @@ class Admindashboardscreen extends StatelessWidget {
             ),
           ),
 
-          // Action Buttons (only for pending)
+          //  Buttons (only if status is pending)
           if (student.status == 'Pending')
             Container(
               padding: const EdgeInsets.all(12),
@@ -361,7 +353,7 @@ class Admindashboardscreen extends StatelessWidget {
                       icon: const Icon(Icons.check_circle, size: 18),
                       label: const Text('Approve'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Color(0xFF1976D2),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         shape: RoundedRectangleBorder(
@@ -471,7 +463,7 @@ class Admindashboardscreen extends StatelessWidget {
                 SnackBar(
                   content: Text('Application ${action.toLowerCase()}d'),
                   backgroundColor: action == 'Approve'
-                      ? Colors.green
+                      ? Color(0xFF1976D2)
                       : Colors.red,
                   duration: const Duration(seconds: 2),
                 ),
@@ -480,7 +472,7 @@ class Admindashboardscreen extends StatelessWidget {
             child: Text(
               action,
               style: TextStyle(
-                color: action == 'Approve' ? Colors.green : Colors.red,
+                color: action == 'Approve' ? Color(0xFF1976D2) : Colors.red,
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -107,7 +107,7 @@ class StudentViewModel extends ChangeNotifier {
   Color getStatusColor(String status) {
     switch (status) {
       case 'Approved':
-        return Colors.green;
+        return Color(0xFF0B1F8F);
       case 'Rejected':
         return Colors.red;
       default:
