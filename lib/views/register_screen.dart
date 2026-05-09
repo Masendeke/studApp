@@ -29,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      backgroundColor: Color.fromARGB(255, 10, 61, 145),
+      backgroundColor: Color(0xFF0B1F8F),
       leading:IconButton( icon: const Icon(Icons.arrow_back,color: Colors.white,),
       onPressed: (){
         Navigator.pop(context);
@@ -46,9 +46,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromARGB(255, 10, 61, 145),
-              Color(0xFF566176),
-              Color(0xFFD9D9D9),
+               Color(0xFF0B1F8F),
+              Color(0xFF1976D2),
+              Colors.white,
             ],
           ),
         ),
@@ -207,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    Color.fromARGB(255, 10, 61, 145),
+                                    Color(0xFF0B1F8F),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),

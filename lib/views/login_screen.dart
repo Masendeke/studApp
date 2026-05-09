@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_assistant_application/routes/app_routes.dart';
 import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 import 'register_screen.dart';
 import 'reset_password_screen.dart';
 import 'admin_dashboard_screen.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -40,9 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromARGB(255, 10, 61, 145),
-              Color(0xFF566176),
-              Color(0xFFD9D9D9),
+              Color(0xFF0B1F8F),
+              Color(0xFF1976D2),
+              Colors.white,
             ],
           ),
         ),
@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 "Forgot Password?",
                                 style: TextStyle(
                                   color:
-                                      Color.fromARGB(255, 10, 61, 145),
+                                       Color(0xFF0B1F8F),
                                 ),
                               ),
                             ),
@@ -256,8 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    const Color.fromARGB(
-                                        255, 10, 61, 145),
+                                    Color(0xFF0B1F8F),
 
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -277,9 +276,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                   if (!context.mounted) return;
 
-                                  Navigator.pushReplacementNamed(
+                                  Navigator.pushReplacement(
                                     context,
-                                    AppRoutes.home,
+                                  MaterialPageRoute(
+                                    builder: (_) => const Homescreen()
+                                    )  ,
                                   );
                                 }
                               },
@@ -304,8 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    const Color.fromARGB(
-                                        255, 10, 61, 145),
+                                     Color(0xFF0B1F8F),
 
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -363,8 +363,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: const Text(
                                   "Register",
                                   style: TextStyle(
-                                    color: Color.fromARGB(
-                                        255, 10, 61, 145),
+                                    color:  Color(0xFF0B1F8F),
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     decoration:
