@@ -7,7 +7,6 @@ class StudentApplication{
   String module1;
   String module2;
   String course;
-
   String status;
 
 StudentApplication({
