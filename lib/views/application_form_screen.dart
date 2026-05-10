@@ -6,7 +6,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart';
+
 import '../viewmodel/viewmodel.dart';
+import '../views/detail_screen.dart';
 
 class Applicationformscreen extends StatefulWidget {
   const Applicationformscreen({super.key});
@@ -29,8 +32,7 @@ class _ApplicationformscreenState
   bool secondModuleEnabled = false;
   bool eligibilityConfirmed = false;
 
-  final TextEditingController supportingDocumentController =
-      TextEditingController();
+  PlatformFile? selectedFile;
 
   final List<String> years = [
     'First Year',
@@ -50,13 +52,6 @@ class _ApplicationformscreenState
     'Third Year': ['TPG316C', 'PRJ300', 'SEC310'],
   };
 
-  @override
-  void dispose() {
-    supportingDocumentController.dispose();
-    super.dispose();
-  }
-
-  // MODERN INPUT STYLE
   InputDecoration buildInputDecoration({
     required String label,
     String? hint,
@@ -66,25 +61,16 @@ class _ApplicationformscreenState
       labelText: label,
       hintText: hint,
       prefixIcon: icon != null ? Icon(icon) : null,
-
       filled: true,
       fillColor: Colors.white,
-
       contentPadding: const EdgeInsets.symmetric(
         vertical: 18,
         horizontal: 15,
       ),
-
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
         borderSide: BorderSide.none,
       ),
-
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: BorderSide.none,
-      ),
-
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
         borderSide: const BorderSide(
@@ -95,7 +81,6 @@ class _ApplicationformscreenState
     );
   }
 
-  // DROPDOWN FIELD
   Widget buildDropdownField({
     required String label,
     required String? value,
@@ -103,27 +88,17 @@ class _ApplicationformscreenState
     required Function(String?) onChanged,
   }) {
     return DropdownButtonFormField<String>(
-      initialValue: value,
-
-      decoration: buildInputDecoration(
-        label: label,
-      ),
-
-      items: items.map((item) {
-        return DropdownMenuItem(
-          value: item,
-          child: Text(item),
-        );
-      }).toList(),
-
+     initialValue: selectedYear,
+      decoration: buildInputDecoration(label: label),
+      items: items
+          .map((item) => DropdownMenuItem(
+                value: item,
+                child: Text(item),
+              ))
+          .toList(),
       onChanged: onChanged,
-
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '$label is required';
-        }
-        return null;
-      },
+      validator: (value) =>
+          value == null ? '$label is required' : null,
     );
   }
 
@@ -138,10 +113,10 @@ class _ApplicationformscreenState
           'Student Assistant Application Form',
           style: TextStyle(color: Colors.white),
         ),
-         leading:IconButton( icon: const Icon(Icons.arrow_back,color: Colors.white,),
-      onPressed: (){
-        Navigator.pop(context);
-      },)
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
 
       body: Container(
@@ -149,7 +124,6 @@ class _ApplicationformscreenState
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-
             colors: [
               Color(0xFF0B1F8F),
               Color(0xFF1976D2),
@@ -166,10 +140,8 @@ class _ApplicationformscreenState
 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
 
-                // PERSONAL INFO
                 const Text(
                   'Personal Information',
                   style: TextStyle(
@@ -183,111 +155,48 @@ class _ApplicationformscreenState
 
                 TextFormField(
                   controller: viewModel.stdNo,
-
                   decoration: buildInputDecoration(
                     label: 'Student Number',
-                    hint: 'Enter student number',
                     icon: Icons.badge,
                   ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Student number is required';
-                    }
-                    return null;
-                  },
+                  validator: (v) =>
+                      v!.isEmpty ? 'Required' : null,
                 ),
 
                 const SizedBox(height: 18),
 
                 TextFormField(
                   controller: viewModel.name,
-
                   decoration: buildInputDecoration(
                     label: 'First Name',
-                    hint: 'Enter first name',
                     icon: Icons.person,
                   ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'First name is required';
-                    }
-
-                    if (value.length < 2) {
-                      return 'Name must be at least 2 characters';
-                    }
-
-                    return null;
-                  },
+                  validator: (v) =>
+                      v!.length < 2 ? 'Invalid name' : null,
                 ),
 
                 const SizedBox(height: 18),
 
                 TextFormField(
                   controller: viewModel.surname,
-
                   decoration: buildInputDecoration(
                     label: 'Surname',
-                    hint: 'Enter surname',
                     icon: Icons.person_outline,
                   ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Surname is required';
-                    }
-                    return null;
-                  },
                 ),
 
                 const SizedBox(height: 18),
 
                 TextFormField(
                   controller: viewModel.email,
-                  keyboardType: TextInputType.emailAddress,
-
                   decoration: buildInputDecoration(
-                    label: 'Email Address',
-                    hint: 'Enter email address',
+                    label: 'Email',
                     icon: Icons.email,
                   ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email is required';
-                    }
-
-                    if (!value.contains('@')) {
-                      return 'Enter a valid email';
-                    }
-
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                TextFormField(
-                  controller: viewModel.course,
-
-                  decoration: buildInputDecoration(
-                    label: 'Course / Qualification',
-                    hint: 'Enter course',
-                    icon: Icons.school,
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Course is required';
-                    }
-                    return null;
-                  },
                 ),
 
                 const SizedBox(height: 30),
 
-                // ACADEMIC INFO
                 const Text(
                   'Academic Information',
                   style: TextStyle(
@@ -300,40 +209,26 @@ class _ApplicationformscreenState
                 const SizedBox(height: 20),
 
                 buildDropdownField(
-                  label: 'Current Year of Study',
+                  label: 'Year of Study',
                   value: selectedYear,
                   items: years,
-
-                  onChanged: (value) {
+                  onChanged: (v) {
                     setState(() {
-                      selectedYear = value;
-                      viewModel.year.text = value ?? '';
+                      selectedYear = v;
+                      viewModel.year.text = v ?? '';
                     });
                   },
                 ),
 
-                const SizedBox(height: 30),
-
-                // MODULE 1
-                const Text(
-                  'Module Application 1',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
+                const SizedBox(height: 25),
 
                 buildDropdownField(
-                  label: 'Academic Level',
+                  label: 'Module Level',
                   value: module1Level,
                   items: academicLevels,
-
-                  onChanged: (value) {
+                  onChanged: (v) {
                     setState(() {
-                      module1Level = value;
+                      module1Level = v;
                       module1Name = null;
                     });
                   },
@@ -345,12 +240,12 @@ class _ApplicationformscreenState
                   buildDropdownField(
                     label: 'Module',
                     value: module1Name,
-                    items: modulesByLevel[module1Level] ?? [],
-
-                    onChanged: (value) {
+                    items:
+                        modulesByLevel[module1Level] ?? [],
+                    onChanged: (v) {
                       setState(() {
-                        module1Name = value;
-                        viewModel.module.text = value ?? '';
+                        module1Name = v;
+                        viewModel.module.text = v ?? '';
                       });
                     },
                   ),
@@ -358,195 +253,158 @@ class _ApplicationformscreenState
                 const SizedBox(height: 25),
 
                 CheckboxListTile(
-                  activeColor: const Color(0xFF0B1F8F),
-
-                  title: const Text(
-                    'Apply for a second module',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-
                   value: secondModuleEnabled,
-
-                  onChanged: (value) {
+                  title: const Text(
+                    'Apply for second module',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onChanged: (v) {
                     setState(() {
-                      secondModuleEnabled = value ?? false;
-
-                      if (!secondModuleEnabled) {
-                        module2Level = null;
-                        module2Name = null;
-                      }
+                      secondModuleEnabled = v!;
+                      module2Level = null;
+                      module2Name = null;
                     });
                   },
                 ),
 
-                // MODULE 2
                 if (secondModuleEnabled) ...[
-                  const SizedBox(height: 10),
-
-                  const Text(
-                    'Module Application 2',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
                   buildDropdownField(
-                    label: 'Academic Level',
+                    label: 'Second Module Level',
                     value: module2Level,
                     items: academicLevels,
-
-                    onChanged: (value) {
+                    onChanged: (v) {
                       setState(() {
-                        module2Level = value;
-                        module2Name = null;
+                        module2Level = v;
                       });
                     },
                   ),
-
-                  const SizedBox(height: 18),
-
-                  if (module2Level != null)
-                    buildDropdownField(
-                      label: 'Module',
-                      value: module2Name,
-                      items:
-                          modulesByLevel[module2Level] ?? [],
-
-                      onChanged: (value) {
-                        setState(() {
-                          module2Name = value;
-                        });
-                      },
-                    ),
                 ],
 
                 const SizedBox(height: 25),
 
-                // SUPPORTING DOCUMENT
-                TextFormField(
-                  controller: supportingDocumentController,
-
-                  decoration: buildInputDecoration(
-                    label: 'Supporting Document',
-                    hint: 'Enter transcript file name',
-                    icon: Icons.upload_file,
+                // FILE UPLOAD
+                const Text(
+                  'Supporting Document',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
 
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Supporting document is required';
+                const SizedBox(height: 10),
+
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.upload_file),
+                  label: const Text("Upload Document"),
+                  onPressed: () async {
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: [
+                        'pdf',
+                        'doc',
+                        'docx'
+                      ],
+                    );
+
+                    if (result != null) {
+                      setState(() {
+                        selectedFile =
+                            result.files.first;
+                      });
                     }
-                    return null;
                   },
                 ),
 
-                const SizedBox(height: 18),
+                Text(
+                  selectedFile != null
+                      ? selectedFile!.name
+                      : "No file selected",
+                  style:
+                      const TextStyle(color: Colors.white),
+                ),
+
+                const SizedBox(height: 20),
 
                 CheckboxListTile(
-                  activeColor: const Color(0xFF0B1F8F),
-
-                  title: const Text(
-                    'I confirm that I meet the eligibility requirements',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-
                   value: eligibilityConfirmed,
-
-                  onChanged: (value) {
+                  title: const Text(
+                    'I confirm eligibility',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onChanged: (v) {
                     setState(() {
-                      eligibilityConfirmed = value ?? false;
+                      eligibilityConfirmed = v!;
                     });
                   },
                 ),
 
                 const SizedBox(height: 30),
 
-                // SUBMIT BUTTON
                 SizedBox(
                   width: double.infinity,
                   height: 55,
-
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           const Color(0xFF0B1F8F),
-
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(15),
-                      ),
                     ),
-
                     onPressed: () {
-
-                      if (!eligibilityConfirmed) {
-
+                      if (selectedFile == null) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(
                           const SnackBar(
                             content: Text(
-                              'Please confirm eligibility requirements.',
-                            ),
+                                'Upload supporting document'),
                           ),
                         );
+                        return;
+                      }
 
+                      if (!eligibilityConfirmed) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Confirm eligibility'),
+                          ),
+                        );
                         return;
                       }
 
                       viewModel.submitApplication();
 
-                      if (viewModel.status == 'Submitted') {
-
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Application submitted successfully!',
-                            ),
+                      if (viewModel.status ==
+                          'Submitted') {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const Detailscreen(),
                           ),
                         );
-
-                        Navigator.pop(context);
                       }
                     },
-
                     child: const Text(
                       'Submit Application',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
+                      style:
+                          TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
-                Center(
-                  child: Text(
-                    'Application Status: ${viewModel.status}',
-
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-
-                      color:
-                          viewModel.status == 'Submitted'
-                              ? Colors.green
-                              : Colors.orange,
-                    ),
+                Text(
+                  'Status: ${viewModel.status}',
+                  style: TextStyle(
+                    color:
+                        viewModel.status == 'Submitted'
+                            ? Colors.green
+                            : Colors.orange,
                   ),
                 ),
-
-                const SizedBox(height: 30),
               ],
             ),
           ),
