@@ -1,3 +1,9 @@
+//224043099 Masendeke CP
+//224014647 Mahlangu P
+//224125791 Khunyeli P
+//224081442 Nlati TT
+//224083089 Tshabane L
+
 import 'package:flutter/material.dart';
 
 import 'package:student_assistant_application/views/admin_login_screen.dart';
@@ -8,9 +14,10 @@ import 'package:student_assistant_application/views/application_form_screen.dart
 import 'package:student_assistant_application/views/home_screen.dart';
 import 'package:student_assistant_application/views/login_screen.dart';
 
-// ADD ALIAS HERE
 import 'package:student_assistant_application/views/detail_screen.dart'
     as detail;
+
+import 'package:student_assistant_application/model/model.dart';
 
 class AppRoutes {
 
@@ -23,8 +30,7 @@ class AppRoutes {
   static const String register = '/register';
   static const String adminlogin = '/adminlogin';
 
-  static Route<dynamic> generateRoute(
-      RouteSettings settings) {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
 
     switch (settings.name) {
 
@@ -43,9 +49,15 @@ class AppRoutes {
           builder: (_) => const Applicationformscreen(),
         );
 
+      // ✅ FIXED HERE
       case details:
+        final student =
+            settings.arguments as StudentApplication;
+
         return MaterialPageRoute(
-          builder: (_) => const detail.DetailScreen(),
+          builder: (_) => detail.DetailScreen(
+            application: student,
+          ),
         );
 
       case admin:
