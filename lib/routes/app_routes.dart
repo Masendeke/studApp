@@ -49,8 +49,7 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const Applicationformscreen(),
         );
-
-      // ✅ FIXED HERE
+    
       case details:
         final student =
             settings.arguments as StudentApplication;

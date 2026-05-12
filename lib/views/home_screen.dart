@@ -1,3 +1,9 @@
+//224043099 Masendeke CP
+//224014647 Mahlangu P
+//224125791 Khunyeli P
+//224081629 Ntlati TT
+//224083089 Tshabane L
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:student_assistant_application/routes/app_routes.dart';
@@ -60,6 +66,8 @@ class _HomescreenState extends State<Homescreen> {
 
             children: [
 
+              const SizedBox(height: 40),
+
               Row(
                 children: [
 
@@ -101,7 +109,7 @@ class _HomescreenState extends State<Homescreen> {
                 ],
               ),
 
-              const SizedBox(height: 35),
+              const SizedBox(height: 30),
 
               Row(
                 children: [
@@ -148,23 +156,23 @@ class _HomescreenState extends State<Homescreen> {
                 ],
               ),
 
-              const SizedBox(height: 40),
-
+              const SizedBox(height: 35),
+           
               const Text(
                 "My Applications",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
 
               const SizedBox(height: 20),
 
+              // 
               if (studentVM.isLoading)
                 const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: Center(child: CircularProgressIndicator()),
                 )
               else if (studentVM.students.isEmpty)
                 const Expanded(
@@ -189,8 +197,10 @@ class _HomescreenState extends State<Homescreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18),
                         ),
+
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(15),
+
                           leading: const CircleAvatar(
                             backgroundColor: Color(0xFFBBDEFB),
                             child: Icon(
@@ -198,10 +208,13 @@ class _HomescreenState extends State<Homescreen> {
                               color: Color(0xFF0B1F8F),
                             ),
                           ),
+
                           title: Text(student.course),
+
                           subtitle: Text(
                             "Student: ${student.name} ${student.surname}",
                           ),
+
                           trailing: Text(
                             student.status,
                             style: TextStyle(
@@ -209,6 +222,7 @@ class _HomescreenState extends State<Homescreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+
                           onTap: () {
                             showDialog(
                               context: context,
@@ -218,23 +232,34 @@ class _HomescreenState extends State<Homescreen> {
                                   content: const Text(
                                     "Are you sure you want to delete this application?",
                                   ),
+
                                   actions: [
                                     TextButton(
                                       onPressed: () =>
                                           Navigator.pop(context),
                                       child: const Text("Cancel"),
                                     ),
+
                                     TextButton(
                                       onPressed: () async {
-                                        await context
-                                            .read<StudentViewModel>()
-                                            .deleteStudent(student.id);
-
-                                        if (!context.mounted) return;
 
                                         Navigator.pop(context);
+
+                                        final id = student.id;
+
+                                        if (id == null) return;
+
+                                        await context
+                                            .read<StudentViewModel>()
+                                            .deleteStudent(id);
+
+                                        if (!context.mounted) return;
                                       },
-                                      child: const Text("Delete"),
+
+                                      child: const Text(
+                                        "Delete",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
                                     ),
                                   ],
                                 );
