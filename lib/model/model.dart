@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //224043099 Masendeke CP
 //224014647 Mahlangu P
 //224125791 Khunyeli P
@@ -10,6 +11,10 @@ class StudentApplication {
 
   final String? userId;
 
+=======
+class StudentApplication {//model class for the student application form and also used to parse the data from the database and also to convert the data to json format
+  final String id;
+>>>>>>> main
   final String stdNo;
 
   final String email;
@@ -29,14 +34,19 @@ class StudentApplication {
   final String status;
 
   final String phone;
-
+// The createdAt and updatedAt fields are optional and can be null when creating a new application, but they will be populated when fetching data from the database
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
+<<<<<<< HEAD
 
   StudentApplication({
     this.userId,
 
+=======
+//constructor for the student application form and also used to parse the data from the database and also to convert the data to json format
+  StudentApplication({//the id is required because it is used to identify the application and also to update the application and also to delete the application
+>>>>>>> main
     required this.id,
 
     required this.phone,
@@ -66,10 +76,14 @@ class StudentApplication {
 
   // TO JSON
 
+<<<<<<< HEAD
   Map<String, dynamic> toJson() => {
 
         // DO NOT SEND ID
 
+=======
+  Map<String, dynamic> toJson() => {//used to convert the data to json format and also used to insert the data to the database
+>>>>>>> main
         'std_no': stdNo,
         
         'user_id': userId,
@@ -103,10 +117,15 @@ class StudentApplication {
 
   factory StudentApplication.fromJson(
     Map<String, dynamic> json,
+<<<<<<< HEAD
   ) {
 
     return StudentApplication(
 
+=======
+  ) {//used to parse the data from the database and also used to convert the data to json format and also used to fetch the data from the database
+    return StudentApplication(//the id is required because it is used to identify the application and also to update the application and also to delete the application
+>>>>>>> main
       id: json['id'].toString(),
 
       userId: json['user_id'],
@@ -132,6 +151,7 @@ class StudentApplication {
           json['status'] ?? 'Pending',
 
       phone: json['phone'] ?? '',
+<<<<<<< HEAD
 
       createdAt:
           json['created_at'] != null
@@ -150,6 +170,14 @@ class StudentApplication {
                 )
 
               : null,
+=======
+      createdAt: json['created_at'] != null// If created_at is not null, parse it to DateTime, otherwise use the current time as a fallback
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null// If updated_at is not null, parse it to DateTime, otherwise use the current time as a fallback
+          ? DateTime.parse(json['updated_at'])
+          : DateTime.now(),
+>>>>>>> main
     );
   }
 }
