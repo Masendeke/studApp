@@ -1,7 +1,7 @@
 //224043099 Masendeke CP
 //224014647 Mahlangu P
 //224125791 Khunyeli P
-//224081442 Nlati TT
+//224081629 Ntlati TT
 //224083089 Tshabane L
 // lib/views/person_details_screen.dart
 // ignore_for_file: deprecated_member_use
