@@ -10,7 +10,7 @@ class Homescreen extends StatefulWidget {
   State<Homescreen> createState() => _HomescreenState();
 }
 
-class _HomescreenState extends State<Homescreen> {
+class _HomescreenState extends State<Homescreen> {// The _HomescreenState class manages the state of the Homescreen, including fetching the student applications and displaying them in a list, as well as handling navigation to the application form and details screens
 
   @override
   void initState() {

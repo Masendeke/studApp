@@ -14,16 +14,16 @@ class Admindashboardscreen extends StatefulWidget {
   @override
   State<Admindashboardscreen> createState() =>
       _AdmindashboardscreenState();
-}
+}// The Admindashboardscreen is a StatefulWidget that displays a list of student applications for the admin to review, and allows navigation to the PersonDetailsScreen when an application is tapped, passing the selected student's details as arguments for further review and management of the application status.
 
 class _AdmindashboardscreenState
     extends State<Admindashboardscreen> {
-
+// The _AdmindashboardscreenState class manages the state of the Admindashboardscreen, including fetching the student applications and displaying them in a list, as well as handling navigation to the PersonDetailsScreen when an application is tapped, passing the selected student's details as arguments for further review and management of the application status.
   @override
   void initState() {
     super.initState();
 
-    Future.microtask(() {
+    Future.microtask(() {// The Future.microtask is used to ensure that the fetchStudents method is called after the widget has been fully initialized, allowing us to fetch the student applications from the database and update the UI accordingly when the admin dashboard screen is first displayed
       Provider.of<StudentViewModel>(
         // ignore: use_build_context_synchronously
         context,
@@ -33,8 +33,8 @@ class _AdmindashboardscreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<StudentViewModel>(
+  Widget build(BuildContext context) {// The build method builds the UI for the admin dashboard screen, displaying a list of student applications with their names, student numbers, and application statuses. When an application is tapped, it navigates to the PersonDetailsScreen, passing the selected student's details as arguments for further review and management of the application status.
+    return Consumer<StudentViewModel>(// The Consumer widget listens to changes in the StudentViewModel and rebuilds the UI accordingly when the list of student applications is updated, ensuring that the admin dashboard always displays the most current data from the database.
       builder: (context, vm, _) {
         final students = vm.students;
 

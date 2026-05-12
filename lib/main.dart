@@ -11,9 +11,9 @@ import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 import 'views/auth_wrapper.dart';
 
 
-void main() async {
+void main() async {// Initialize Supabase and run the app
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(
+  await Supabase.initialize(// Initialize Supabase with the provided URL and anonymous key
     url: 'https://irpvuuxxrctobbrqwrag.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlycHZ1dXh4cmN0b2JicnF3cmFnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNDkyMzUsImV4cCI6MjA5MzkyNTIzNX0.Vymlt-27UUEklDXWuYXXocdI2PZ4JZ2d9fL0z-ctNLY',
     );
@@ -22,13 +22,13 @@ void main() async {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  Widget build(BuildContext context) {// Use MultiProvider to provide both AuthViewModel and StudentViewModel to the widget tree, and set up the MaterialApp with the initial route and route generator
+    return MultiProvider(// Use MultiProvider to provide both AuthViewModel and StudentViewModel to the widget tree, and set up the MaterialApp with the initial route and route generator
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => StudentViewModel()),
       ],
-      child: MaterialApp(
+      child: MaterialApp(// Set up the MaterialApp with the initial route and route generator
         debugShowCheckedModeBanner: false,
         title: 'Student Assistant App',
         home: const AuthWrapper(),
