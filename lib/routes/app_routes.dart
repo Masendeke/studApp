@@ -29,6 +29,7 @@ class AppRoutes {
   static const String resetpassword = '/resetpassword';
   static const String register = '/register';
   static const String adminlogin = '/adminlogin';
+   static const String editApplication = '/editApplication';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
 
