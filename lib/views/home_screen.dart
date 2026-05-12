@@ -136,7 +136,12 @@ class _HomescreenState extends State<Homescreen> {
                         vertical: 15,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.editApplication,
+                      );
+                    },
                     icon: const Icon(Icons.edit),
                     label: const Text("Manage"),
                   ),
