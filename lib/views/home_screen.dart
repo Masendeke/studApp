@@ -71,7 +71,7 @@ class _HomescreenState extends State<Homescreen> {
       ),
     );
   }
-
+//Instead of writing everything inside build(), you split it into smaller pieces.
   Widget _buildHeader() {
     return Row(
       children: [

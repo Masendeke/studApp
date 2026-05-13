@@ -70,19 +70,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
 
                   children: [
-                    SizedBox(
-                      height: 75,
-                      width: 75,
-
-                      child: CircleAvatar(
-                        child: ClipOval(
-                          child: Image.asset(
-                            "assets/logo.png",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                    Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(40),
+                      image: const DecorationImage(
+                        image: AssetImage("assets/logo.png"),
+                        fit: BoxFit.cover,
                       ),
                     ),
+                  ),
+
 
                     const SizedBox(width: 12),
 
