@@ -5,7 +5,10 @@
 //224083089 Tshabane L
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:student_assistant_application/routes/app_routes.dart';
 import 'package:student_assistant_application/views/auth_viewmodel.dart';
+import 'package:student_assistant_application/views/application_form_screen.dart';
+//import 'package:student_assistant_application/views/edit_application_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 import 'views/auth_wrapper.dart';
@@ -32,32 +35,15 @@ void main() async {
         debugShowCheckedModeBanner: false,
         title: 'Student Assistant App',
         home: const AuthWrapper(),
+        routes: {
+    AppRoutes.apply: (context) =>
+        const Applicationformscreen(),
+
+  //   AppRoutes.editApplication: (context) =>
+  //       const EditApplicationScreen(),
+  },
+
       ),
     );
   }
 }
-//   MultiProvider(
-//       providers: [
-//         ChangeNotifierProvider(create: (_) => AuthViewModel()),
-//         ChangeNotifierProvider(create: (_) => StudentViewModel()),
-//       ],
-//       child: MyApp(),
-//      ),
-//   );
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//      initialRoute: AppRoutes.login,
-//      onGenerateRoute: AppRoutes.generateRoute,
-//       debugShowCheckedModeBanner: false,
-//       title: 'Student Assistant App',
-//       home: const LoginScreen(),
-
-//     );
-//   }
-// }
