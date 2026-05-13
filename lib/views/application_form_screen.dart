@@ -1,14 +1,15 @@
 //224043099 Masendeke CP
 //224014647 Mahlangu P
 //224125791 Khunyeli P
-//224081442 Nlati TT
+//224081629 Ntlati TT
 //224083089 Tshabane L
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_assistant_application/views/detail_screen.dart';
-import '../viewmodel/viewmodel.dart';
 
+import '../viewmodel/viewmodel.dart';
+import '../model/model.dart';
+import 'detail_screen.dart';
 
 class Applicationformscreen extends StatefulWidget {
   const Applicationformscreen({super.key});
@@ -18,34 +19,29 @@ class Applicationformscreen extends StatefulWidget {
       _ApplicationformscreenState();
 }
 
-class _ApplicationformscreenState
-    extends State<Applicationformscreen> {
+class _ApplicationformscreenState extends State<Applicationformscreen> {// The _ApplicationformscreenState class manages the state of the Applicationformscreen, including the form key for validation, text controllers for the input fields, and the logic for submitting the application form to the database through the StudentViewModel. It also defines the available years of study and modules for selection in the application form, ensuring that students can only select valid options based on their level of study when filling out the application form.
+// The _ApplicationformscreenState class manages the state of the Applicationformscreen, including the form key for validation, text controllers for the input fields, and the logic for submitting the application form to the database through the StudentViewModel. It also defines the available years of study and modules for selection in the application form, ensuring that students can only select valid options based on their level of study when filling out the application form.
+  final _formKey = GlobalKey<FormState>();
+// The _formKey is used to validate the form fields when the user clicks the submit button, ensuring that all required fields are filled out correctly before allowing the application submission process to proceed
+  final TextEditingController stdNo = TextEditingController();
+  final TextEditingController name = TextEditingController();
+  final TextEditingController surname = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController phone = TextEditingController();
+  final TextEditingController course = TextEditingController();
+// The text controllers for the student number, name, surname, email, phone, and course fields are used to manage the input from the user for each respective field in the application form, allowing us to access the values entered by the user when validating the form and submitting the application details to the database through the StudentViewModel
   String? selectedYear;
-
-  String? module1Level;
   String? module1Name;
-
-  String? module2Level;
   String? module2Name;
 
-  bool secondModuleEnabled = false;
   bool eligibilityConfirmed = false;
-
-  final TextEditingController supportingDocumentController =
-      TextEditingController();
-
+// The years list defines the available years of study for the application form, allowing students to select their current year of study when filling out the application form, which is essential for determining their eligibility and the appropriate modules they can select based on their level of study
   final List<String> years = [
     'First Year',
     'Second Year',
-    'Third Year'
+    'Third Year',
   ];
-
-  final List<String> academicLevels = [
-    'First Year',
-    'Second Year',
-    'Third Year'
-  ];
-
+// The modulesByLevel map defines the available modules for each year of study, allowing the application form to dynamically display the appropriate module options based on the selected year, ensuring that students can only select modules that are relevant to their level of study when filling out the application form
   final Map<String, List<String>> modulesByLevel = {
     'First Year': ['ICT101', 'TPG111', 'MAT101'],
     'Second Year': ['TPG211', 'DBS210', 'WPR221'],
@@ -53,504 +49,114 @@ class _ApplicationformscreenState
   };
 
   @override
-  void dispose() {
-    supportingDocumentController.dispose();
+  void dispose() {// The dispose method is overridden to clean up the text controllers when the screen is disposed, preventing memory leaks and ensuring that resources are properly released when the user navigates away from the application form screen
+    stdNo.dispose();
+    name.dispose();
+    surname.dispose();
+    email.dispose();
+    phone.dispose();
+    course.dispose();
     super.dispose();
-  }
-
-  // MODERN INPUT STYLE
-  InputDecoration buildInputDecoration({
-    required String label,
-    String? hint,
-    IconData? icon,
-  }) {
-    return InputDecoration(
-      labelText: label,
-      hintText: hint,
-      prefixIcon: icon != null ? Icon(icon) : null,
-
-      filled: true,
-      fillColor: Colors.white,
-
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 18,
-        horizontal: 15,
-      ),
-
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: BorderSide.none,
-      ),
-
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: BorderSide.none,
-      ),
-
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(
-          color: Color(0xFF0B1F8F),
-          width: 2,
-        ),
-      ),
-    );
-  }
-
-  // DROPDOWN FIELD
-  Widget buildDropdownField({
-    required String label,
-    required String? value,
-    required List<String> items,
-    required Function(String?) onChanged,
-  }) {
-    return DropdownButtonFormField<String>(
-      initialValue: value,
-
-      decoration: buildInputDecoration(
-        label: label,
-      ),
-
-      items: items.map((item) {
-        return DropdownMenuItem(
-          value: item,
-          child: Text(item),
-        );
-      }).toList(),
-
-      onChanged: onChanged,
-
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '$label is required';
-        }
-        return null;
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<StudentViewModel>(context);
+// The build method builds the UI for the application form screen, including the form fields for student number, name, surname, email, phone, course, year of study, and module selection. It also includes a submit button that triggers the validation and submission logic when pressed, allowing students to fill out the application form and submit their details to the database through the StudentViewModel.
+    final vm = context.read<StudentViewModel>();// The StudentViewModel is accessed using context.read to allow us to call the addStudent method when the user submits the application form, enabling us to manage the state of the application and handle the logic for adding a new student application to the database when the form is submitted successfully.
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Application Form"),
         backgroundColor: const Color(0xFF0B1F8F),
-        title: const Text(
-          'Student Assistant Application Form',
-          style: TextStyle(color: Colors.white),
-        ),
-         leading:IconButton( icon: const Icon(Icons.arrow_back,color: Colors.white,),
-      onPressed: (){
-        Navigator.pop(context);
-      },)
       ),
 
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      body: Padding(
+        padding: const EdgeInsets.all(16),
 
-            colors: [
-              Color(0xFF0B1F8F),
-              Color(0xFF1976D2),
-              Colors.white,
-            ],
-          ),
-        ),
+        child: Form(
+          key: _formKey,
 
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
 
-          child: Form(
-            key: viewModel.formKey,
+              TextFormField(
+                controller: stdNo,
+                decoration: const InputDecoration(labelText: "Student No"),
+                validator: (v) => v!.isEmpty ? "Required" : null,
+              ),
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              TextFormField(
+                controller: name,
+                decoration: const InputDecoration(labelText: "Name"),
+              ),
 
-              children: [
+              TextFormField(
+                controller: surname,
+                decoration: const InputDecoration(labelText: "Surname"),
+              ),
 
-                // PERSONAL INFO
-                const Text(
-                  'Personal Information',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              TextFormField(
+                controller: email,
+                decoration: const InputDecoration(labelText: "Email"),
+              ),
 
-                const SizedBox(height: 20),
+              TextFormField(
+                controller: phone,
+                decoration: const InputDecoration(labelText: "Phone"),
+              ),
 
-                TextFormField(
-                  controller: viewModel.stdNo,
+              TextFormField(
+                controller: course,
+                decoration: const InputDecoration(labelText: "Course"),
+              ),
 
-                  decoration: buildInputDecoration(
-                    label: 'Student Number',
-                    hint: 'Enter student number',
-                    icon: Icons.badge,
-                  ),
+              const SizedBox(height: 20),
 
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Student number is required';
-                    }
-                    return null;
-                  },
-                ),
+              ElevatedButton(// The ElevatedButton is used to trigger the submission of the application form when pressed. It validates the form fields using the _formKey, checks if the eligibility is confirmed, and if everything is valid, it creates a new StudentApplication object with the details entered by the user and submits it to the database through the StudentViewModel's addStudent method. If the submission is successful, it navigates to the DetailScreen, passing the newly created student application as an argument for further review and tracking of the application status.
+                onPressed: vm.isLoading
+                    ? null
+                    : () async {// When the submit button is pressed, the form is validated using the _formKey. If the validation passes (i.e., all required fields are filled out correctly), and the eligibility is confirmed, a new StudentApplication object is created with the details entered by the user in the form fields. This object is then submitted to the database through the StudentViewModel's addStudent method, which handles the logic for adding the new application to the database and updating the UI accordingly.
 
-                const SizedBox(height: 18),
+                        if (!_formKey.currentState!.validate()) return;
 
-                TextFormField(
-                  controller: viewModel.name,
+                        if (!eligibilityConfirmed) return;
 
-                  decoration: buildInputDecoration(
-                    label: 'First Name',
-                    hint: 'Enter first name',
-                    icon: Icons.person,
-                  ),
+                        final student = StudentApplication(// When the submit button is pressed, the form is validated using the _formKey. If the validation passes (i.e., all required fields are filled out correctly), and the eligibility is confirmed, a new StudentApplication object is created with the details entered by the user in the form fields. This object is then submitted to the database through the StudentViewModel's addStudent method, which handles the logic for adding the new application to the database and updating the UI accordingly.
+                          id: '',
+                          stdNo: stdNo.text,
+                          name: name.text,
+                          surname: surname.text,
+                          email: email.text,
+                          phone: phone.text,
+                          course: course.text,
+                          yearOfStudy: selectedYear ?? '',
+                          module1: module1Name ?? '',
+                          module2: module2Name ?? '',
+                          status: 'Pending',
+                          createdAt: DateTime.now(),
+                          updatedAt: DateTime.now(),
+                        );// The StudentApplication object is created with the details entered by the user in the form fields, including the student number, name, surname, email, phone, course, selected year of study, and selected modules. The status is set to 'Pending' by default, and the createdAt and updatedAt fields are set to the current date and time.
 
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'First name is required';
-                    }
+                        final success =
+                            await vm.addStudent(student);// The addStudent method of the StudentViewModel is called to submit the new student application to the database. It returns a boolean indicating whether the submission was successful or not, allowing us to provide feedback to the user and navigate to the DetailScreen if the submission is successful, passing the newly created student application as an argument for further review and tracking of the application status.
 
-                    if (value.length < 2) {
-                      return 'Name must be at least 2 characters';
-                    }
+                        if (!context.mounted) return;
 
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                TextFormField(
-                  controller: viewModel.surname,
-
-                  decoration: buildInputDecoration(
-                    label: 'Surname',
-                    hint: 'Enter surname',
-                    icon: Icons.person_outline,
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Surname is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                TextFormField(
-                  controller: viewModel.email,
-                  keyboardType: TextInputType.emailAddress,
-
-                  decoration: buildInputDecoration(
-                    label: 'Email Address',
-                    hint: 'Enter email address',
-                    icon: Icons.email,
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email is required';
-                    }
-
-                    if (!value.contains('@')) {
-                      return 'Enter a valid email';
-                    }
-
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                TextFormField(
-                  controller: viewModel.course,
-
-                  decoration: buildInputDecoration(
-                    label: 'Course / Qualification',
-                    hint: 'Enter course',
-                    icon: Icons.school,
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Course is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 30),
-
-                // ACADEMIC INFO
-                const Text(
-                  'Academic Information',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                buildDropdownField(
-                  label: 'Current Year of Study',
-                  value: selectedYear,
-                  items: years,
-
-                  onChanged: (value) {
-                    setState(() {
-                      selectedYear = value;
-                      viewModel.year.text = value ?? '';
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 30),
-
-                // MODULE 1
-                const Text(
-                  'Module Application 1',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                buildDropdownField(
-                  label: 'Academic Level',
-                  value: module1Level,
-                  items: academicLevels,
-
-                  onChanged: (value) {
-                    setState(() {
-                      module1Level = value;
-                      module1Name = null;
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                if (module1Level != null)
-                  buildDropdownField(
-                    label: 'Module',
-                    value: module1Name,
-                    items: modulesByLevel[module1Level] ?? [],
-
-                    onChanged: (value) {
-                      setState(() {
-                        module1Name = value;
-                        viewModel.module.text = value ?? '';
-                      });
-                    },
-                  ),
-
-                const SizedBox(height: 25),
-
-                CheckboxListTile(
-                  activeColor: const Color(0xFF0B1F8F),
-
-                  title: const Text(
-                    'Apply for a second module',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-
-                  value: secondModuleEnabled,
-
-                  onChanged: (value) {
-                    setState(() {
-                      secondModuleEnabled = value ?? false;
-
-                      if (!secondModuleEnabled) {
-                        module2Level = null;
-                        module2Name = null;
-                      }
-                    });
-                  },
-                ),
-
-                // MODULE 2
-                if (secondModuleEnabled) ...[
-                  const SizedBox(height: 10),
-
-                  const Text(
-                    'Module Application 2',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  buildDropdownField(
-                    label: 'Academic Level',
-                    value: module2Level,
-                    items: academicLevels,
-
-                    onChanged: (value) {
-                      setState(() {
-                        module2Level = value;
-                        module2Name = null;
-                      });
-                    },
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  if (module2Level != null)
-                    buildDropdownField(
-                      label: 'Module',
-                      value: module2Name,
-                      items:
-                          modulesByLevel[module2Level] ?? [],
-
-                      onChanged: (value) {
-                        setState(() {
-                          module2Name = value;
-                        });
+                        if (success) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(// If the application submission is successful, the user is navigated to the DetailScreen, passing the newly created student application as an argument, allowing them to view the details of their submitted application and track its status in the future.
+                              builder: (_) => DetailScreen(
+                                application: student,
+                              ),
+                            ),
+                          );
+                        }
                       },
-                    ),
-                ],
 
-                const SizedBox(height: 25),
-
-                // SUPPORTING DOCUMENT
-                TextFormField(
-                  controller: supportingDocumentController,
-
-                  decoration: buildInputDecoration(
-                    label: 'Supporting Document',
-                    hint: 'Enter transcript file name',
-                    icon: Icons.upload_file,
-                  ),
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Supporting document is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                CheckboxListTile(
-                  activeColor: const Color(0xFF0B1F8F),
-
-                  title: const Text(
-                    'I confirm that I meet the eligibility requirements',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-
-                  value: eligibilityConfirmed,
-
-                  onChanged: (value) {
-                    setState(() {
-                      eligibilityConfirmed = value ?? false;
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 30),
-
-                // SUBMIT BUTTON
-                SizedBox(
-                  width: double.infinity,
-                  height: 55,
-
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xFF0B1F8F),
-
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(15),
-                      ),
-                    ),
-
-                    onPressed: () {
-
-                      if (!eligibilityConfirmed) {
-
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Please confirm eligibility requirements.',
-                            ),
-                          ),
-                        );
-
-                        return;
-                      }
-
-                      viewModel.submitApplication();
-
-                      if (viewModel.status == 'Submitted') {
-
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Application submitted successfully!',
-                            ),
-                          ),
-                        );
-
-                        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> const DetailScreen(),));
-                      }
-                    },
-
-                    child: const Text(
-                      'Submit Application',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                Center(
-                  child: Text(
-                    'Application Status: ${viewModel.status}',
-
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-
-                      color:
-                          viewModel.status == 'Submitted'
-                              ? Colors.green
-                              : Colors.orange,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-              ],
-            ),
+                child: const Text("Submit"),
+              ),
+            ],
           ),
         ),
       ),

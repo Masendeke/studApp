@@ -1,174 +1,110 @@
 //224043099 Masendeke CP
 //224014647 Mahlangu P
 //224125791 Khunyeli P
-//224081442 Nlati TT
+//224081629 Ntlati TT
 //224083089 Tshabane L
 
 import 'package:flutter/material.dart';
 import 'package:student_assistant_application/model/model.dart';
 
-class EditApplicationScreen extends StatefulWidget {
-  final StudentApplication app;
+class EditApplicationScreen extends StatefulWidget {//this screen is used to edit the application details and also to update the application details in the database
+  final StudentApplication app;// The app variable is used to hold the current state of the application details, allowing us to update the UI after editing without needing to refetch data from the database
 
-  const EditApplicationScreen({
+  const EditApplicationScreen({//The constructor of the EditApplicationScreen takes a StudentApplication object as an argument, which is passed from the DetailScreen when the user clicks the edit button
     super.key,
     required this.app,
   });
-
+// The EditApplicationScreen is a StatefulWidget because we need to manage the state of the text fields and update the UI after editing the application details
   @override
   State<EditApplicationScreen> createState() =>
-      _EditApplicationScreenState();
+      _EditApplicationScreenState();// The createState method creates the mutable state for this widget, which is managed by the _EditApplicationScreenState class
 }
 
 class _EditApplicationScreenState
     extends State<EditApplicationScreen> {
-
+// The _EditApplicationScreenState class manages the state of the EditApplicationScreen, including the text controllers for the input fields and the logic for saving changes to the application details
   late TextEditingController _studNoController;
   late TextEditingController _emailController;
   late TextEditingController _nameController;
   late TextEditingController _surnameController;
-  late TextEditingController _yearofstudController;
+  late TextEditingController _yearController;
   late TextEditingController _module1Controller;
   late TextEditingController _module2Controller;
   late TextEditingController _courseController;
 
   @override
-  void initState() {
+  void initState() {// Initialize the text controllers with the current application details when the screen is first created, allowing the user to see the existing details and edit them as needed
     super.initState();
 
     _studNoController =
-        TextEditingController(text: widget.app.stdNo);
+        TextEditingController(text: widget.app.stdNo);// The student number controller is initialized with the current student number from the application details, allowing the user to see and edit the existing student number
 
     _emailController =
-        TextEditingController(text: widget.app.email);
+        TextEditingController(text: widget.app.email);// The email controller is initialized with the current email from the application details, allowing the user to see and edit the existing email
 
     _nameController =
-        TextEditingController(text: widget.app.name);
+        TextEditingController(text: widget.app.name);// The name controller is initialized with the current name from the application details, allowing the user to see and edit the existing name
 
     _surnameController =
-        TextEditingController(text: widget.app.surname);
+        TextEditingController(text: widget.app.surname);// The surname controller is initialized with the current surname from the application details, allowing the user to see and edit the existing surname
 
-    _yearofstudController =
-        TextEditingController(
-      text: widget.app.yearOfStudy,
-    );
+    _yearController =
+        TextEditingController(text: widget.app.yearOfStudy);// The year of study controller is initialized with the current year of study from the application details, allowing the user to see and edit the existing year of study
 
     _module1Controller =
-        TextEditingController(text: widget.app.module1);
+        TextEditingController(text: widget.app.module1);// The module 1 controller is initialized with the current module 1 from the application details, allowing the user to see and edit the existing module 1
 
     _module2Controller =
-        TextEditingController(text: widget.app.module2);
+        TextEditingController(text: widget.app.module2);// The module 2 controller is initialized with the current module 2 from the application details, allowing the user to see and edit the existing module 2
 
     _courseController =
-        TextEditingController(text: widget.app.course);
+        TextEditingController(text: widget.app.course);// The course controller is initialized with the current course from the application details, allowing the user to see and edit the existing course
   }
 
   @override
-  void dispose() {
-
+  void dispose() {// Dispose of the text controllers when the screen is disposed to free up resources and prevent memory leaks, as the controllers are no longer needed once the user has finished editing the application details
     _studNoController.dispose();
     _emailController.dispose();
     _nameController.dispose();
     _surnameController.dispose();
-    _yearofstudController.dispose();
+    _yearController.dispose();
     _module1Controller.dispose();
     _module2Controller.dispose();
     _courseController.dispose();
-
     super.dispose();
   }
 
-  // INPUT DESIGN
-  InputDecoration buildInputDecoration({
-    required String label,
-    IconData? icon,
-  }) {
-
+  InputDecoration buildInput(String label, IconData icon) {
     return InputDecoration(
-
       labelText: label,
-
-      labelStyle: const TextStyle(
-        color: Colors.black87,
-      ),
-
-      prefixIcon:
-          icon != null
-              ? Icon(
-                  icon,
-                  color: const Color(0xFF0B1F8F),
-                )
-              : null,
-
+      prefixIcon: Icon(icon, color: const Color(0xFF0B1F8F)),
       filled: true,
       fillColor: Colors.white,
-
-      contentPadding:
-          const EdgeInsets.symmetric(
-        vertical: 18,
-        horizontal: 15,
-      ),
-
       border: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.circular(15),
-
+        borderRadius: BorderRadius.circular(15),
         borderSide: BorderSide.none,
-      ),
-
-      enabledBorder: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.circular(15),
-
-        borderSide: BorderSide.none,
-      ),
-
-      focusedBorder: OutlineInputBorder(
-        borderRadius:
-            BorderRadius.circular(15),
-
-        borderSide: const BorderSide(
-          color: Color(0xFF0B1F8F),
-          width: 2,
-        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       appBar: AppBar(
-
-        backgroundColor:
-            const Color(0xFF0B1F8F),
-
+        backgroundColor: const Color(0xFF0B1F8F),
         title: const Text(
-          "Edit Information",
-
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          "Edit Application",
+          style: TextStyle(color: Colors.white),
         ),
-
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
 
       body: Container(
-
         decoration: const BoxDecoration(
-
           gradient: LinearGradient(
-
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-
             colors: [
-
               Color(0xFF0B1F8F),
               Color(0xFF1976D2),
               Colors.white,
@@ -177,174 +113,101 @@ class _EditApplicationScreenState
         ),
 
         child: SingleChildScrollView(
-
           padding: const EdgeInsets.all(16),
 
           child: Column(
-
             children: [
 
               TextField(
                 controller: _studNoController,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Student Number",
-                  icon: Icons.badge,
-                ),
+                decoration: buildInput("Student Number", Icons.badge),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
               TextField(
                 controller: _emailController,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Email",
-                  icon: Icons.email,
-                ),
+                decoration: buildInput("Email", Icons.email),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
               TextField(
                 controller: _nameController,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Name",
-                  icon: Icons.person,
-                ),
+                decoration: buildInput("Name", Icons.person),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
               TextField(
                 controller: _surnameController,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Surname",
-                  icon: Icons.person_outline,
-                ),
+                decoration: buildInput("Surname", Icons.person_outline),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
               TextField(
-                controller:
-                    _yearofstudController,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Year of Study",
-                  icon: Icons.school,
-                ),
+                controller: _yearController,
+                decoration: buildInput("Year of Study", Icons.school),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
               TextField(
-                controller:
-                    _module1Controller,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Module 1",
-                  icon: Icons.book,
-                ),
+                controller: _module1Controller,
+                decoration: buildInput("Module 1", Icons.book),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
               TextField(
-                controller:
-                    _module2Controller,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Module 2",
-                  icon: Icons.menu_book,
-                ),
+                controller: _module2Controller,
+                decoration: buildInput("Module 2", Icons.menu_book),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
               TextField(
-                controller:
-                    _courseController,
-
-                decoration:
-                    buildInputDecoration(
-                  label: "Course",
-                  icon: Icons.cast_for_education,
-                ),
+                controller: _courseController,
+                decoration: buildInput("Course", Icons.cast_for_education),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 25),
 
               SizedBox(
-
                 width: double.infinity,
                 height: 55,
 
                 child: ElevatedButton(
-
-                  style:
-                      ElevatedButton.styleFrom(
-
-                    backgroundColor:
-                        const Color(
-                      0xFF0B1F8F,
-                    ),
-
-                    shape:
-                        RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(
-                        15,
-                      ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0B1F8F),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
 
                   onPressed: () {
-
-                    // UPDATE DATA
-                    widget.app.stdNo =
-                        _studNoController.text;
-
-                    widget.app.email =
-                        _emailController.text;
-
-                    widget.app.name =
-                        _nameController.text;
-
-                    widget.app.surname =
-                        _surnameController.text;
-
-                    widget.app.yearOfStudy =
-                        _yearofstudController.text;
-
-                    widget.app.module1 =
-                        _module1Controller.text;
-
-                    widget.app.module2 =
-                        _module2Controller.text;
-
-                    widget.app.course =
-                        _courseController.text;
-
-                    Navigator.pop(
-                      context,
-                      widget.app,
+                    final updated = StudentApplication(
+                      id: widget.app.id,
+                      stdNo: _studNoController.text,
+                      email: _emailController.text,
+                      name: _nameController.text,
+                      surname: _surnameController.text,
+                      yearOfStudy: _yearController.text,
+                      module1: _module1Controller.text,
+                      module2: _module2Controller.text,
+                      course: _courseController.text,
+                      phone: widget.app.phone,
+                      status: widget.app.status,
+                      createdAt: widget.app.createdAt,
+                      updatedAt: DateTime.now(),
                     );
+
+                    Navigator.pop(context, updated);
                   },
 
                   child: const Text(
-
                     "Save Changes",
-
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

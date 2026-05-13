@@ -1,7 +1,7 @@
 //224043099 Masendeke CP
 //224014647 Mahlangu P
 //224125791 Khunyeli P
-//224081442 Nlati TT
+//224081629 Ntlati TT
 //224083089 Tshabane L
 import 'package:flutter/material.dart';
 
@@ -14,9 +14,9 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState
-    extends State<ResetPasswordScreen> {
-  final _formKey = GlobalKey<FormState>();
-
+    extends State<ResetPasswordScreen> {//This screen is used to reset the password of the user and also to update the password in the database, it contains two text fields for the new password and confirm password, and a button to reset the password
+  final _formKey = GlobalKey<FormState>();// The _formKey is used to validate the form fields when the user clicks the reset button, ensuring that the new password and confirm password fields are filled out correctly before allowing the password reset process to proceed
+// The newPassword and confirmPassword controllers are used to manage the input from the user for the new password and confirm password fields, allowing us to access the values entered by the user when validating the form and performing the password reset logic
   final TextEditingController newPassword =
       TextEditingController();
   final TextEditingController confirmPassword =
@@ -205,7 +205,7 @@ class _ResetPasswordScreenState
                                       BorderRadius.circular(12),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () {// When the reset button is pressed, the form is validated using the _formKey. If the validation passes (i.e., the new password and confirm password fields are correctly filled out), the password reset logic can be executed, which may involve updating the password in the database and providing feedback to the user about the success of the operation
                                 if (_formKey.currentState!
                                     .validate()) {
                                   // reset logic

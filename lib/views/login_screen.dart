@@ -1,15 +1,16 @@
 //224043099 Masendeke CP
 //224014647 Mahlangu P
 //224125791 Khunyeli P
-//224081442 Nlati TT
+//224081629 Ntlati TT
 //224083089 Tshabane L
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 import 'package:student_assistant_application/views/admin_login_screen.dart';
-import 'register_screen.dart';
-import 'reset_password_screen.dart';
-import 'home_screen.dart';
+import 'package:student_assistant_application/views/auth_viewmodel.dart';
+import 'package:student_assistant_application/views/home_screen.dart';
+import 'package:student_assistant_application/views/register_screen.dart';
+import 'package:student_assistant_application/views/reset_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController email = TextEditingController();
+
   final TextEditingController password = TextEditingController();
 
   bool obscurePassword = true;
@@ -30,11 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     email.dispose();
     password.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final authVM = context.watch<AuthViewModel>();
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -55,17 +60,20 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 25),
-        
+
             child: Column(
               children: [
-        
-                // HEADER
+
+                // Header
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+
                   children: [
                     SizedBox(
                       height: 75,
                       width: 75,
+
                       child: CircleAvatar(
                         child: ClipOval(
                           child: Image.asset(
@@ -75,23 +83,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-        
+
                     const SizedBox(width: 12),
-        
+
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+
                       children: [
                         Text(
                           "DEVELOPMENT",
+
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-        
+
                         Text(
                           "CREW",
+
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 40,
@@ -103,21 +114,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-        
+
                 const SizedBox(height: 45),
-        
-                // LOGIN FORM
+
+                // Login form
+
                 Form(
                   key: _formKey,
-        
+
                   child: Container(
                     width: 380,
                     padding: const EdgeInsets.all(25),
-        
+
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(25),
-        
+
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
@@ -126,62 +138,68 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-        
+
                     child: Column(
                       children: [
-        
+
                         const Text(
                           "Welcome",
+
                           style: TextStyle(
                             fontSize: 38,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-        
+
                         const Text(
-                          "Please login in to your student assistant account",
+                          "Please login to your student assistant account",
+
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
                           ),
                         ),
-        
+
                         const SizedBox(height: 35),
-        
-                        // EMAIL
+
+                        // Email
+
                         TextFormField(
                           controller: email,
-        
+
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Enter email";
                             }
+
                             return null;
                           },
-        
+
                           decoration: InputDecoration(
                             hintText: "22404099@stud.cut.ac.za",
                             labelText: "University email",
+
                             prefixIcon:
                                 const Icon(Icons.email_outlined),
-        
+
                             contentPadding:
                                 const EdgeInsets.symmetric(
                               vertical: 18,
                               horizontal: 15,
                             ),
-        
+
                             border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.circular(12),
                             ),
                           ),
                         ),
-        
-                        // FORGOT PASSWORD
+
+                        // Forgot password
+
                         Align(
                           alignment: Alignment.centerRight,
-        
+
                           child: TextButton(
                             onPressed: () {
                               Navigator.push(
@@ -192,49 +210,51 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               );
                             },
-        
+
                             child: const Text(
                               "Forgot Password?",
+
                               style: TextStyle(
-                                color:
-                                     Color(0xFF0B1F8F),
+                                color: Color(0xFF0B1F8F),
                               ),
                             ),
                           ),
                         ),
-        
-                        // PASSWORD
+
+                        // Password
+
                         TextFormField(
                           controller: password,
                           obscureText: obscurePassword,
-        
+
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Enter password";
                             }
+
                             return null;
                           },
-        
+
                           decoration: InputDecoration(
                             hintText: "Enter password",
                             labelText: "Password",
-        
+
                             prefixIcon:
                                 const Icon(Icons.lock_outline),
-        
+
                             contentPadding:
                                 const EdgeInsets.symmetric(
                               vertical: 18,
                               horizontal: 15,
                             ),
-        
+
                             suffixIcon: IconButton(
                               icon: Icon(
                                 obscurePassword
                                     ? Icons.visibility_off
                                     : Icons.visibility,
                               ),
-        
+
                               onPressed: () {
                                 setState(() {
                                   obscurePassword =
@@ -242,81 +262,114 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               },
                             ),
-        
+
                             border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.circular(12),
                             ),
                           ),
                         ),
-        
-                        const SizedBox(height: 24),
-        
-                        // LOGIN BUTTON
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-        
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Color(0xFF0B1F8F),
-        
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(12),
-                              ),
-                            ),
-        
-                            onPressed: () async {
-                              if (_formKey.currentState!
-                                  .validate()) {
-                                await context
-                                    .read<AuthViewModel>()
-                                    .login(
-                                      email.text,
-                                      password.text,
-                                    );
-        
-                                if (!context.mounted) return;
-        
-                                Navigator.pushReplacement(
-                                  context,
-                                MaterialPageRoute(
-                                  builder: (_) => const Homescreen()
-                                  )  ,
-                                );
-                              }
-                            },
-        
-                            child: const Text(
-                              "Login",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
+
+                        const SizedBox(height: 10),
+
+                        // Error message
+
+                        if (authVM.errorMessage != null)
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 10),
+
+                            child: Text(
+                              authVM.errorMessage!,
+
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
                               ),
                             ),
                           ),
-                        ),
-        
-                        const SizedBox(height: 15),
-        
-                        // ADMIN DASHBOARD BUTTON
+
+                        const SizedBox(height: 24),
+
+                        // Login button
+
                         SizedBox(
                           width: double.infinity,
                           height: 50,
-        
+
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                   Color(0xFF0B1F8F),
-        
+                                  const Color(0xFF0B1F8F),
+
                               shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(12),
                               ),
                             ),
-        
+
+                            onPressed: authVM.isLoading
+                                ? null
+                                : () async {
+                                    if (_formKey.currentState!
+                                        .validate()) {
+
+                                      final success =
+                                          await context
+                                              .read<AuthViewModel>()
+                                              .signIn(
+                                                email.text.trim(),
+                                                password.text.trim(),
+                                              );
+
+                                      if (!context.mounted) return;
+
+                                      if (success) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const Homescreen(),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+
+                            child: authVM.isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    "Login",
+
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 15),
+
+                        // Admin login button
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color(0xFF0B1F8F),
+
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(12),
+                              ),
+                            ),
+
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -326,9 +379,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               );
                             },
-        
+
                             child: const Text(
                               "Admin Login",
+
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -336,23 +390,25 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-        
+
                         const SizedBox(height: 20),
-        
-                        // REGISTER LINK
+
+                        // Register link
+
                         Row(
                           mainAxisAlignment:
                               MainAxisAlignment.center,
-        
+
                           children: [
                             const Text(
                               "Don't have an account? ",
+
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
                               ),
                             ),
-        
+
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -363,11 +419,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 );
                               },
-        
+
                               child: const Text(
                                 "Register",
+
                                 style: TextStyle(
-                                  color:  Color(0xFF0B1F8F),
+                                  color: Color(0xFF0B1F8F),
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   decoration:

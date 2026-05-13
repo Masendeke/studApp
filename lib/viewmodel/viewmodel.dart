@@ -1,215 +1,104 @@
-// ignore_for_file: strict_top_level_inference
-
 import 'package:flutter/material.dart';
-import '../views/search_screens.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../model/model.dart';
 
-class StudentViewModel extends ChangeNotifier {
-  final formKey = GlobalKey<FormState>();
+class StudentViewModel extends ChangeNotifier {//this class is used to manage the state of the application and also to manage the data of the application and also to manage the logic of the application and also to manage the communication with the database and also to manage the communication with the storage service
+  final SupabaseClient _supabase = Supabase.instance.client;
 
-  final stdNo = TextEditingController();
-  final name = TextEditingController();
-  final surname = TextEditingController();
-  final email = TextEditingController();
-  final course = TextEditingController();
-  final year = TextEditingController();
-  final module = TextEditingController();
-
-  //search entities
-  List<StudentApplication> allPersons = [];
+// State variables
+  List<StudentApplication> students = [];
   List<StudentApplication> searchResults = [];
-  String _query = '';
-  StudentApplication? selectedPerson;
+// Loading and error states
+  bool isLoading = false;
+  String? errorMessage;
 
-  // Search methods
-  void search(String query) {
-    _query = query;
+  // FETCH STUDENTS
+  Future<void> fetchStudents() async {
+    isLoading = true;
+    notifyListeners();
 
-    if (_query.isEmpty) {
-      searchResults = [];
-    } else {
-      searchResults = allPersons
-          .where(
-            (person) =>
-                person.name.toLowerCase().contains(_query.toLowerCase()) ||
-                person.surname.toLowerCase().contains(_query.toLowerCase()) ||
-                person.email.toLowerCase().contains(_query.toLowerCase()) ||
-                person.stdNo.toLowerCase().contains(_query.toLowerCase()),
-          )
+    try {// Fetch all student applications from the database
+      final response = await _supabase.from('students').select();
+// Parse the response into a list of StudentApplication objects
+      students = (response as List)
+          .map((json) => StudentApplication.fromJson(json))
           .toList();
+
+      searchResults = students;
+    } catch (e) {
+      errorMessage = e.toString();
     }
+// Update loading state
+    isLoading = false;
     notifyListeners();
   }
 
-  void showSearchDialog(BuildContext context) {
-    showDialog(context: context, builder: (_) => const SearchDialog());
-  }
-
-  void selectPerson(StudentApplication person) {
-    selectedPerson = person;
+  // ADD STUDENT
+  Future<bool> addStudent(StudentApplication student) async {
+    isLoading = true;
     notifyListeners();
-  }
 
-  // Clear search
-  void clearSearch() {
-    _query = '';
-    searchResults = [];
-    notifyListeners();
-  }
+    try {// Create a new student application with the current timestamp for createdAt and updatedAt
+      final now = DateTime.now();
 
-  String status = 'Pending';
-
-  void submitApplication() {
-    if (formKey.currentState!.validate()) {
-      status = 'Submitted';
+      final newStudent = StudentApplication(
+        id: student.id,
+        stdNo: student.stdNo,
+        email: student.email,
+        name: student.name,
+        surname: student.surname,
+        yearOfStudy: student.yearOfStudy,
+        module1: student.module1,
+        module2: student.module2,
+        course: student.course,
+        phone: student.phone,
+        status: student.status,
+        createdAt: now,
+        updatedAt: now,
+      );
+// Insert the new student application into the database
+      await _supabase.from('students').insert(newStudent.toJson());
+// Refresh the student list after adding
+      await fetchStudents();
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      return false;
+    } finally {// Update loading state
+      isLoading = false;
       notifyListeners();
     }
   }
 
-  // Load fake data
-  void loadPersons(List<StudentApplication> persons) {
-    allPersons = persons;
+  // DELETE STUDENT
+  Future<void> deleteStudent(String id) async {// Delete a student application from the database using the provided ID and then refresh the student list
+    await _supabase.from('students').delete().eq('id', id);
+    await fetchStudents();
+  }
+
+  // SEARCH
+  void search(String query) {
+    if (query.isEmpty) {// If the search query is empty, show all students
+      searchResults = students;
+    } else {// Filter the students based on the search query (case-insensitive) and update the search results
+      searchResults = students.where((student) {
+        final q = query.toLowerCase();
+
+// Check if the student's name, surname, email, or student number contains the search query
+        return student.name.toLowerCase().contains(q) ||
+            student.surname.toLowerCase().contains(q) ||
+            student.email.toLowerCase().contains(q) ||
+            student.stdNo.toLowerCase().contains(q);
+      }).toList();
+    }
+// Notify listeners to update the UI with the new search results
     notifyListeners();
   }
 
-  // Getters
-  List<StudentApplication> get searchResultsList => searchResults;
-  String get query => _query;
-  bool get hasResults => searchResults.isNotEmpty;
-  bool get isSearching => _query.isNotEmpty;
-
-  //Counters
-  int get totalStudentCount => allPersons.length;
-  int get pendingCount => allPersons.where((p) => p.status == 'Pending').length;
-  int get approvedCount =>
-      allPersons.where((p) => p.status == 'Approved').length;
-  int get rejectedCount =>
-      allPersons.where((p) => p.status == 'Rejected').length;
-
-  //Approve/Rejected methods
-  void approveApplication(String stdNo) {
-    final index = allPersons.indexWhere((p) => p.stdNo == stdNo);
-    if (index != -1) {
-      allPersons[index].status = 'Approved';
-      notifyListeners();
-    }
-  }
-
-  void rejectApplication(String stdNo) {
-    final index = allPersons.indexWhere((p) => p.stdNo == stdNo);
-    if (index != -1) {
-      allPersons[index].status = 'Rejected';
-      notifyListeners();
-    }
-  }
-
-  //Status Colors
-  Color getStatusColor(String status) {
-    switch (status) {
-      case 'Approved':
-        return Color(0xFF0B1F8F);
-      case 'Rejected':
-        return Colors.red;
-      default:
-        return Colors.orange;
-    }
-  }
-
-  //fake Data for visual purposes
-  //this will be replaced with thr database (API call / supabase)
-  List<StudentApplication> getMockData() {
-    return [
-      StudentApplication(
-        stdNo: '223672435',
-        name: 'John',
-        email: '223672435@gmailcom',
-        surname: 'Johns',
-        yearOfStudy: '2023',
-        course: 'IT',
-        module1: 'SOD',
-        module2: 'TPG',
-        status: 'Pending',
-      ),
-      StudentApplication(
-        stdNo: '224067592',
-        name: 'Jane',
-        email: 'jane@example.com',
-        surname: 'Smith',
-        yearOfStudy: '2024',
-        course: 'CMN',
-        module1: 'SOD',
-        module2: 'TPG',
-        status: 'Approved',
-      ),
-      StudentApplication(
-        stdNo: '225673421',
-        name: 'Bob',
-        email: 'bob@example.com',
-        surname: 'Johnson',
-        yearOfStudy: '2025',
-        course: 'CMN',
-        module1: 'CMN',
-        module2: 'TPG',
-        status: 'Rejected',
-      ),
-      StudentApplication(
-        stdNo: '222786902',
-        name: 'Alice',
-        email: 'alice@example.com',
-        surname: 'Brown',
-        yearOfStudy: '2025',
-        course: 'IT',
-        module1: 'SSE',
-        module2: 'TPG',
-        status: 'Pending',
-      ),
-      StudentApplication(
-        stdNo: '224675893',
-        name: 'Charlie',
-        email: 'charlie@example.com',
-        surname: 'Wilson',
-        yearOfStudy: '2026',
-        course: 'IT',
-        module1: 'SOD',
-        module2: 'TPG',
-        status: 'Pending',
-      ),
-      StudentApplication(
-        stdNo: '224674011',
-        name: 'Diana',
-        email: 'diana@example.com',
-        surname: 'Prince',
-        yearOfStudy: '2026',
-        course: 'IT',
-        module1: 'SOD',
-        module2: 'SOE',
-        status: 'Approved',
-      ),
-      StudentApplication(
-        stdNo: '221345876',
-        name: 'Keabetsoe',
-        email: 'Kea@example.com',
-        surname: 'Sekhuthe',
-        yearOfStudy: '2024',
-        course: 'CMN',
-        module1: 'SOD',
-        module2: 'SPG',
-      ),
-    ];
-  }
-
-  void refreshData() {
-    getMockData(); //when database is being builty make this fetch the data from the database
-  }
-} //end viewModel
-
-class AuthViewModel extends ChangeNotifier {
-  bool loading = false;
-  Future<void> login(String email, String password) async {
-    loading = true;
-    notifyListeners();
-    await Future.delayed(const Duration(seconds: 1));
-    loading = false;
+  // CLEAR SEARCH
+  void clearSearch() {// Clear the search results and show all students
+    searchResults = students;
     notifyListeners();
   }
 }
