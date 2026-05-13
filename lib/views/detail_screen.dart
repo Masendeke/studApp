@@ -1,7 +1,14 @@
+//224043099 Masendeke CP
+//224014647 Mahlangu P
+//224125791 Khunyeli P
+//224081629 Ntlati TT
+//224083089 Tshabane L
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/model.dart';
 import '../viewmodel/viewmodel.dart';
+import 'edit_application_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   final StudentApplication application;
@@ -25,7 +32,7 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   Future<void> _confirmDeletion() async {
-    final bool? confirm = await showDialog<bool>(
+    final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Delete Application?"),
@@ -46,15 +53,37 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
 
-    if (confirm == true && mounted) {
-      await context
-          .read<StudentViewModel>()
-          .deleteStudent(myApplication.id);
+    if (confirm != true) return;
+    if (myApplication.id == null) return;
 
-      if (!mounted) return;
+    // ignore: use_build_context_synchronously
+    await context.read<StudentViewModel>().deleteStudent(myApplication.id!);
 
-      Navigator.pop(context);
-    }
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
+  Widget buildRow(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+            )),
+        const SizedBox(height: 5),
+        Text(value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            )),
+        const SizedBox(height: 12),
+        Container(height: 1, color: Colors.white24),
+        const SizedBox(height: 12),
+      ],
+    );
   }
 
   @override
@@ -62,10 +91,8 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF0B1F8F),
-        title: const Text(
-          "Application Details",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Application Details",
+            style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
 
@@ -82,59 +109,85 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
 
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Text(
                 myApplication.name,
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
-              Text(
-                "Status: ${myApplication.status}",
-                style: const TextStyle(color: Colors.white),
-              ),
+              buildRow("Status", myApplication.status),
+              buildRow("Student Number", myApplication.stdNo),
+              buildRow("Email", myApplication.email),
+              buildRow("Phone", myApplication.phone),
+              buildRow("Course", myApplication.course),
+              buildRow("Year of Study", myApplication.yearOfStudy),
+              buildRow("Module 1", myApplication.module1),
+              buildRow("Module 2", myApplication.module2),
 
               const SizedBox(height: 20),
 
-              Text(
-                "Student No: ${myApplication.stdNo}",
-                style: const TextStyle(color: Colors.white),
+              // EDIT BUTTON
+              SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0B1F8F),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  onPressed: () async {
+                    final updatedApp =
+                        await Navigator.push<StudentApplication>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditApplicationScreen(
+                          app: myApplication,
+                        ),
+                      ),
+                    );
+
+                    if (updatedApp != null && mounted) {
+                      setState(() {
+                        myApplication = updatedApp;
+                      });
+                    }
+                  },
+                  child: const Text(
+                    "Edit Application",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
               ),
 
-              Text(
-                "Email: ${myApplication.email}",
-                style: const TextStyle(color: Colors.white),
-              ),
+              const SizedBox(height: 15),
 
-              Text(
-                "Course: ${myApplication.course}",
-                style: const TextStyle(color: Colors.white),
-              ),
-
-              const Spacer(),
-
+              // DELETE BUTTON
               SizedBox(
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                   onPressed: _confirmDeletion,
                   child: const Text(
                     "Delete Application",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ),
