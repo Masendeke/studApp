@@ -3,7 +3,7 @@
 //224125791 Khunyeli P
 //224081629 Ntlati TT
 //224083089 Tshabane L
-// lib/views/person_details_screen.dart
+
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';

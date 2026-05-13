@@ -36,7 +36,6 @@ class _ResetPasswordScreenState
   Widget build(BuildContext context) {
     return Scaffold(
 
-      //  APP BAR WITH ARROW ONLY (NO BUTTON TEXT)
       appBar: AppBar(
         backgroundColor: const Color(0xFF0B1F8F),
         leading: IconButton(
@@ -51,7 +50,7 @@ class _ResetPasswordScreenState
         ),
       ),
 
-      //  SAME BACKGROUND AS REGISTER / LOGIN
+
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -76,7 +75,6 @@ class _ResetPasswordScreenState
               child: Column(
                 children: [
 
-                  // ✅ SAME CARD SIZE AS LOGIN/REGISTER
                   Form(
                     key: _formKey,
                     child: Container(
