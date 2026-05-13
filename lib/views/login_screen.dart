@@ -7,7 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:student_assistant_application/views/admin_login_screen.dart';
-import 'package:student_assistant_application/views/auth_viewmodel.dart';
+import 'package:student_assistant_application/viewmodel/auth_viewmodel.dart';
 import 'package:student_assistant_application/views/home_screen.dart';
 import 'package:student_assistant_application/views/register_screen.dart';
 import 'package:student_assistant_application/views/reset_password_screen.dart';

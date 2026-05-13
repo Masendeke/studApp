@@ -50,9 +50,14 @@ class AppRoutes {//this class is used to manage the routes of the application an
       case apply:
         return MaterialPageRoute(
           builder: (_) => const Applicationformscreen(),
+<<<<<<< HEAD
+        );
+    
+=======
         );//used for the application form screen route and also added in the home screen for the apply button
 
       // ✅ FIXED HERE
+>>>>>>> main
       case details:
         final student =
             settings.arguments as StudentApplication;

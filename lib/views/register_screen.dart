@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_assistant_application/views/auth_viewmodel.dart';
+import 'package:student_assistant_application/viewmodel/auth_viewmodel.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
