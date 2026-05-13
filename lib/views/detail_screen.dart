@@ -22,43 +22,28 @@ class DetailScreen extends StatefulWidget {
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-<<<<<<< HEAD
 class _DetailScreenState extends State<DetailScreen> {
-=======
-class _DetailScreenState extends State<DetailScreen> {//this screen is used to show the details of the application and also to delete the application
-// The myApplication variable is used to hold the current state of the application details, allowing us to update the UI after deletion without needing to refetch data from the database
->>>>>>> main
   late StudentApplication myApplication;
 
   @override
-  void initState() {// Initialize the myApplication variable with the application passed from the previous screen when the DetailScreen is first created
+  void initState() {
     super.initState();
     myApplication = widget.application;
   }
 
-<<<<<<< HEAD
   Future<void> _confirmDeletion() async {
     final confirm = await showDialog<bool>(
-=======
-  void _confirmDeletion() async {// Show a confirmation dialog before deleting the application to prevent accidental deletions
-// If the user confirms the deletion, call the deleteStudent method from the StudentViewModel to delete the application from the database, and then navigate back to the HomeScreen
-    final bool? confirm = await showDialog<bool>(
->>>>>>> main
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Delete Application?"),
         content: const Text("This action cannot be undone."),
         actions: [
-<<<<<<< HEAD
-=======
-// The Cancel button will simply close the dialog and return false, while the Delete button will return true to indicate that the user has confirmed the deletion
->>>>>>> main
           TextButton(
-            onPressed: () => Navigator.pop(context, false),// Return false when the user cancels the deletion
+            onPressed: () => Navigator.pop(context, false),
             child: const Text("Cancel"),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context, true),// Return true when the user confirms the deletion
+            onPressed: () => Navigator.pop(context, true),
             child: const Text(
               "Delete",
               style: TextStyle(color: Colors.red),
@@ -68,29 +53,11 @@ class _DetailScreenState extends State<DetailScreen> {//this screen is used to s
       ),
     );
 
-    if (confirm == true && mounted) {// If the user confirmed the deletion and the widget is still mounted, proceed to delete the application
-            child: const Text(
-              "Delete",
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
-    );
-
-<<<<<<< HEAD
     if (confirm != true) return;
     if (myApplication.id == null) return;
 
     // ignore: use_build_context_synchronously
     await context.read<StudentViewModel>().deleteStudent(myApplication.id!);
-=======
-    if (confirm == true && mounted) {
-// If the user confirmed the deletion and the widget is still mounted, proceed to delete the application
-      await context
-          .read<StudentViewModel>()
-          .deleteStudent(myApplication.id);
->>>>>>> main
 
     if (!mounted) return;
     Navigator.pop(context);
@@ -121,10 +88,6 @@ class _DetailScreenState extends State<DetailScreen> {//this screen is used to s
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-=======
-// Build the UI for the DetailScreen, displaying the application details and providing a button to delete the application
->>>>>>> main
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF0B1F8F),
@@ -132,7 +95,7 @@ class _DetailScreenState extends State<DetailScreen> {//this screen is used to s
             style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-// The body of the screen is styled with a gradient background and displays the student's name, status, student number, email, and course details in a styled manner, and also provides a button to delete the application
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -151,10 +114,6 @@ class _DetailScreenState extends State<DetailScreen> {//this screen is used to s
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-<<<<<<< HEAD
-=======
-// Display the student's name, status, student number, email, and course details in a styled manner, and also provide a button to delete the application
->>>>>>> main
               Text(
                 myApplication.name,
                 style: const TextStyle(
@@ -225,10 +184,6 @@ class _DetailScreenState extends State<DetailScreen> {//this screen is used to s
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-<<<<<<< HEAD
-=======
-// The Delete Application button will trigger the _confirmDeletion method when pressed, which will handle the deletion process with a confirmation dialog
->>>>>>> main
                   onPressed: _confirmDeletion,
                   child: const Text(
                     "Delete Application",

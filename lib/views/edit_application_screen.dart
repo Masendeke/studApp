@@ -7,22 +7,22 @@
 import 'package:flutter/material.dart';
 import 'package:student_assistant_application/model/model.dart';
 
-class EditApplicationScreen extends StatefulWidget {//this screen is used to edit the application details and also to update the application details in the database
-  final StudentApplication app;// The app variable is used to hold the current state of the application details, allowing us to update the UI after editing without needing to refetch data from the database
+class EditApplicationScreen extends StatefulWidget {
+  final StudentApplication app;
 
-  const EditApplicationScreen({//The constructor of the EditApplicationScreen takes a StudentApplication object as an argument, which is passed from the DetailScreen when the user clicks the edit button
+  const EditApplicationScreen({
     super.key,
     required this.app,
   });
-// The EditApplicationScreen is a StatefulWidget because we need to manage the state of the text fields and update the UI after editing the application details
+
   @override
   State<EditApplicationScreen> createState() =>
-      _EditApplicationScreenState();// The createState method creates the mutable state for this widget, which is managed by the _EditApplicationScreenState class
+      _EditApplicationScreenState();
 }
 
 class _EditApplicationScreenState
     extends State<EditApplicationScreen> {
-// The _EditApplicationScreenState class manages the state of the EditApplicationScreen, including the text controllers for the input fields and the logic for saving changes to the application details
+
   late TextEditingController _studNoController;
   late TextEditingController _emailController;
   late TextEditingController _nameController;
@@ -33,36 +33,36 @@ class _EditApplicationScreenState
   late TextEditingController _courseController;
 
   @override
-  void initState() {// Initialize the text controllers with the current application details when the screen is first created, allowing the user to see the existing details and edit them as needed
+  void initState() {
     super.initState();
 
     _studNoController =
-        TextEditingController(text: widget.app.stdNo);// The student number controller is initialized with the current student number from the application details, allowing the user to see and edit the existing student number
+        TextEditingController(text: widget.app.stdNo);
 
     _emailController =
-        TextEditingController(text: widget.app.email);// The email controller is initialized with the current email from the application details, allowing the user to see and edit the existing email
+        TextEditingController(text: widget.app.email);
 
     _nameController =
-        TextEditingController(text: widget.app.name);// The name controller is initialized with the current name from the application details, allowing the user to see and edit the existing name
+        TextEditingController(text: widget.app.name);
 
     _surnameController =
-        TextEditingController(text: widget.app.surname);// The surname controller is initialized with the current surname from the application details, allowing the user to see and edit the existing surname
+        TextEditingController(text: widget.app.surname);
 
     _yearController =
-        TextEditingController(text: widget.app.yearOfStudy);// The year of study controller is initialized with the current year of study from the application details, allowing the user to see and edit the existing year of study
+        TextEditingController(text: widget.app.yearOfStudy);
 
     _module1Controller =
-        TextEditingController(text: widget.app.module1);// The module 1 controller is initialized with the current module 1 from the application details, allowing the user to see and edit the existing module 1
+        TextEditingController(text: widget.app.module1);
 
     _module2Controller =
-        TextEditingController(text: widget.app.module2);// The module 2 controller is initialized with the current module 2 from the application details, allowing the user to see and edit the existing module 2
+        TextEditingController(text: widget.app.module2);
 
     _courseController =
-        TextEditingController(text: widget.app.course);// The course controller is initialized with the current course from the application details, allowing the user to see and edit the existing course
+        TextEditingController(text: widget.app.course);
   }
 
   @override
-  void dispose() {// Dispose of the text controllers when the screen is disposed to free up resources and prevent memory leaks, as the controllers are no longer needed once the user has finished editing the application details
+  void dispose() {
     _studNoController.dispose();
     _emailController.dispose();
     _nameController.dispose();
