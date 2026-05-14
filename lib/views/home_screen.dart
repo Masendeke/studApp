@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 /*
 *Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
 *Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
@@ -6,6 +7,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:student_assistant_application/viewmodel/auth_viewmodel.dart';
 import '../routes/app_routes.dart';
 import '../viewmodel/viewmodel.dart';
 import '../model/model.dart';
@@ -23,16 +25,24 @@ class _HomescreenState extends State<Homescreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<StudentViewModel>().fetchAllStudents();
+        final authVM = context.read<AuthViewModel>();
+        final userId = authVM.currentUserId;
+
+        if (userId != null) {
+          context.read<StudentViewModel>().fetchUserStudents(userId);
+        }
       }
     });
   }
 
   Color getStatusColor(String? status) {
     switch (status) {
-      case 'Approved': return Colors.green;
-      case 'Rejected': return Colors.red;
-      default: return Colors.orange;
+      case 'Approved':
+        return Colors.green;
+      case 'Rejected':
+        return Colors.red;
+      default:
+        return Colors.orange;
     }
   }
 
@@ -59,7 +69,14 @@ class _HomescreenState extends State<Homescreen> {
               const SizedBox(height: 30),
               _buildButtons(context),
               const SizedBox(height: 35),
-              const Text("My Applications", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+              const Text(
+                "My Applications",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
               const SizedBox(height: 20),
               _buildApplicationsList(studentVM, context),
             ],
@@ -68,7 +85,8 @@ class _HomescreenState extends State<Homescreen> {
       ),
     );
   }
-//Instead of writing everything inside build(), you split it into smaller pieces.
+
+  //Instead of writing everything inside build(), you split it into smaller pieces.
   Widget _buildHeader() {
     return Row(
       children: [
@@ -78,15 +96,28 @@ class _HomescreenState extends State<Homescreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),
-            image: const DecorationImage(image: AssetImage("assets/logo.png"), fit: BoxFit.cover),
+            image: const DecorationImage(
+              image: AssetImage("assets/logo.png"),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         const SizedBox(width: 15),
         const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Welcome Back", style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold)),
-            Text("Student Dashboard", style: TextStyle(color: Colors.white70, fontSize: 16)),
+            Text(
+              "Welcome Back",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "Student Dashboard",
+              style: TextStyle(color: Colors.white70, fontSize: 16),
+            ),
           ],
         ),
       ],
@@ -125,10 +156,15 @@ class _HomescreenState extends State<Homescreen> {
     if (vm.isLoading) {
       return const Expanded(child: Center(child: CircularProgressIndicator()));
     }
-    
+
     if (vm.allPersons.isEmpty) {
       return const Expanded(
-        child: Center(child: Text("No applications found", style: TextStyle(fontSize: 18, color: Colors.white))),
+        child: Center(
+          child: Text(
+            "No applications found",
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        ),
       );
     }
 
@@ -140,7 +176,9 @@ class _HomescreenState extends State<Homescreen> {
           return Card(
             elevation: 4,
             margin: const EdgeInsets.only(bottom: 15),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
             child: ListTile(
               contentPadding: const EdgeInsets.all(15),
               leading: const CircleAvatar(
@@ -151,10 +189,17 @@ class _HomescreenState extends State<Homescreen> {
               subtitle: Text("${student.name} ${student.surname}"),
               trailing: Text(
                 student.status,
-                style: TextStyle(color: getStatusColor(student.status), fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: getStatusColor(student.status),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.details, arguments: student);
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.details,
+                  arguments: student,
+                );
               },
               onLongPress: () => _confirmDelete(context, student),
             ),
@@ -165,14 +210,60 @@ class _HomescreenState extends State<Homescreen> {
   }
 void _showManageDialog(BuildContext context) {
 
-  final vm = context.read<StudentViewModel>();
+  void _showManageDialog(BuildContext context) {
+    final vm = context.read<StudentViewModel>();
 
-  showModalBottomSheet(
-    context: context,
-
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(25),
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text("Select Application to Edit"),
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 400,
+          child: vm.allPersons.isEmpty
+              ? const Center(child: Text("No applications found"))
+              : ListView.builder(
+                  itemCount: vm.allPersons.length,
+                  itemBuilder: (context, index) {
+                    final student = vm.allPersons[index];
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: getStatusColor(
+                          student.status,
+                        ).withOpacity(0.2),
+                        child: Icon(
+                          Icons.assignment,
+                          color: getStatusColor(student.status),
+                        ),
+                      ),
+                      title: Text(student.course),
+                      subtitle: Text(
+                        "${student.name} ${student.surname} - ${student.status}",
+                      ),
+                      trailing: const Icon(
+                        Icons.edit,
+                        color: Color(0xFF0B1F8F),
+                      ),
+                      onTap: () {
+                        Navigator.pop(dialogContext);
+                        if (mounted) {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.editApplication,
+                            arguments: student,
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text("Close"),
+          ),
+        ],
       ),
     ),
 
@@ -413,28 +504,28 @@ void _showManageDialog(BuildContext context) {
 }
 
   void _confirmDelete(BuildContext context, StudentApplication student) {
-    
     final scaffoldContext = context;
-    
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text("Delete Application"),
-        content: Text("Delete ${student.name} ${student.surname}'s application?"),
+        content: Text(
+          "Delete ${student.name} ${student.surname}'s application?",
+        ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(dialogContext), 
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text("Cancel"),
           ),
           TextButton(
             onPressed: () async {
- 
               Navigator.pop(dialogContext);
-              
-              if (student.id != null) {
 
-                await scaffoldContext.read<StudentViewModel>().deleteStudent(student.id!);
-                
+              if (student.id != null) {
+                await scaffoldContext.read<StudentViewModel>().deleteStudent(
+                  student.id!,
+                );
 
                 if (mounted) {
                   ScaffoldMessenger.of(scaffoldContext).showSnackBar(
