@@ -1,10 +1,9 @@
-//224043099 Masendeke CP
-//224014647 Mahlangu P
-//224125791 Khunyeli P
-//224081629 Ntlati TT
-//224083089 Tshabane L
+/*
+*Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
+*Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
+*Question : ResetPasswordScreen 
+*/
 import 'package:flutter/material.dart';
-
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
 
