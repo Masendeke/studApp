@@ -1,10 +1,8 @@
-
-// ignore_for_file: deprecated_member_use, use_build_context_synchronously
-/*
-*Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
-*Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
-*Question : Applicationformscreen 
-*/
+//224043099 Masendeke CP
+//224014647 Mahlangu P
+//224125791 Khunyeli P
+//224081629 Ntlati TT
+//224083089 Tshabane L
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -35,7 +33,34 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
   bool eligibilityConfirmed = false;
   bool isSubmitting = false;
 
-  final List<String> years = ['First Year', 'Second Year', 'Third Year'];
+  Future<void> pickFile() async {
+    FilePickerResult? result =
+        await FilePicker.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        selectedFileName = result.files.single.name;
+      });
+    }
+  }
+
+  final List<String> years = [
+    'First Year',
+    'Second Year',
+    'Third Year'
+  ];
+
+  final List<String> academicLevels = [
+    'First Year',
+    'Second Year',
+    'Third Year',
+  ];
+
+  final Map<String, List<String>> modulesByLevel = {
+    'First Year': ['ICT101', 'TPG111', 'MAT101'],
+    'Second Year': ['TPG211', 'DBS210', 'WPR221'],
+    'Third Year': ['TPG316C', 'PRJ300', 'SEC310'],
+  };
 
   @override
   void dispose() {
