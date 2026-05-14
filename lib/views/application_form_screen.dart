@@ -44,7 +44,7 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
 
   Future<void> pickFile() async {
     FilePickerResult? result =
-        await FilePicker.platform.pickFiles();
+        await FilePicker.pickFiles();
 
     if (result != null) {
       setState(() {
