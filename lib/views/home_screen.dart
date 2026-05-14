@@ -4,7 +4,7 @@
 *Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
 *Question : Homescreen 
 */
-// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:student_assistant_application/viewmodel/auth_viewmodel.dart';
