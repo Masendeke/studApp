@@ -3,6 +3,9 @@
 //224125791 Khunyeli P
 //224081629 Ntlati TT
 //224083089 Tshabane L
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,14 +35,15 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
   String? selectedYear;
   bool eligibilityConfirmed = false;
   bool isSubmitting = false;
+  String? selectedFileName;
 
-  Future<void> pickFile() async {
+   Future<void> pickFile() async {
     FilePickerResult? result =
-        await FilePicker.pickFiles();
+        await FilePicker.platform.pickFiles();
 
     if (result != null) {
       setState(() {
-        selectedFileName = result.files.single.name;
+        selectedFileName  = result.files.single.name;
       });
     }
   }
