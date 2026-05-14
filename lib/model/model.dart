@@ -3,7 +3,6 @@
 //224125791 Khunyeli P
 //224081629 Ntlati TT
 //224083089 Tshabane L
-
 class StudentApplication {
   final String? id;
   final String? userId;

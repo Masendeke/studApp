@@ -3,7 +3,6 @@
 //224125791 Khunyeli P
 //224081629 Ntlati TT
 //224083089 Tshabane L
-
 import 'package:flutter/material.dart';
 import 'package:student_assistant_application/views/admin_login_screen.dart';
 import 'package:student_assistant_application/views/register_screen.dart';

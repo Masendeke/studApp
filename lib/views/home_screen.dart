@@ -166,51 +166,254 @@ class _HomescreenState extends State<Homescreen> {
       ),
     );
   }
+void _showManageDialog(BuildContext context) {
 
-  void _showManageDialog(BuildContext context) {
-    final vm = context.read<StudentViewModel>();
-    
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text("Select Application to Edit"),
-        content: SizedBox(
-          width: double.maxFinite,
-          height: 400,
-          child: vm.allPersons.isEmpty
-              ? const Center(child: Text("No applications found"))
-              : ListView.builder(
-                  itemCount: vm.allPersons.length,
-                  itemBuilder: (context, index) {
-                    final student = vm.allPersons[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                        // ignore: deprecated_member_use
-                        backgroundColor: getStatusColor(student.status).withOpacity(0.2),
-                        child: Icon(Icons.assignment, color: getStatusColor(student.status)),
-                      ),
-                      title: Text(student.course),
-                      subtitle: Text("${student.name} ${student.surname} - ${student.status}"),
-                      trailing: const Icon(Icons.edit, color: Color(0xFF0B1F8F)),
-                      onTap: () {
-                        Navigator.pop(dialogContext);
-                        if (mounted) {
-                          Navigator.pushNamed(context, AppRoutes.editApplication, arguments: student);
-                        }
-                      },
-                    );
-                  },
-                ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext), 
-            child: const Text("Close"),
-          ),
-        ],
+  final vm = context.read<StudentViewModel>();
+
+  showModalBottomSheet(
+    context: context,
+
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(25),
       ),
-    );
-  }
+    ),
+
+    builder: (context) {
+
+      return Padding(
+        padding: const EdgeInsets.all(20),
+
+        child: SingleChildScrollView(
+          child: Column(
+            
+            mainAxisSize: MainAxisSize.max,
+          
+            children: [
+          
+              const Text(
+                "Manage Applications",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  
+                ),
+              ),
+          
+              const SizedBox(height: 20),
+          
+              // SORT A-Z
+              ListTile(
+          
+                leading: const Icon(
+                  Icons.sort_by_alpha,
+                  color: Color(0xFF0B1F8F),
+                ),
+          
+                title: const Text("Sort A - Z"),
+          
+                onTap: () {
+          
+                  vm.allPersons.sort(
+                    (a, b) => a.name.compareTo(b.name),
+                  );
+          
+                  vm.notifyListeners();
+          
+                  Navigator.pop(context);
+                },
+              ),
+          
+              // SORT Z-A
+              ListTile(
+          
+                leading: const Icon(
+                  Icons.sort_by_alpha,
+                  color: Colors.red,
+                ),
+          
+                title: const Text("Sort Z - A"),
+          
+                onTap: () {
+          
+                  vm.allPersons.sort(
+                    (a, b) => b.name.compareTo(a.name),
+                  );
+          
+                  vm.notifyListeners();
+          
+                  Navigator.pop(context);
+                },
+              ),
+          
+              // OLDEST FIRST
+              ListTile(
+          
+                leading: const Icon(
+                  Icons.history,
+                  color: Colors.orange,
+                ),
+          
+                title: const Text("Oldest Applications"),
+          
+                onTap: () {
+          
+                  vm.allPersons.sort(
+                  (a, b) => (b.createdAt ?? DateTime.now())
+              .compareTo(a.createdAt ?? DateTime.now())
+                  );
+          
+                  vm.notifyListeners();
+          
+                  Navigator.pop(context);
+                },
+              ),
+          
+              // LATEST FIRST
+              ListTile(
+          
+                leading: const Icon(
+                  Icons.access_time,
+                  color: Colors.green,
+                ),
+          
+                title: const Text("Latest Applications"),
+          
+                onTap: () {
+          
+                  vm.allPersons.sort(
+                  (a, b) => (a.createdAt ?? DateTime.now())
+              .compareTo(b.createdAt ?? DateTime.now())
+                  );
+          
+                  vm.notifyListeners();
+          
+                  Navigator.pop(context);
+                },
+              ),
+          
+              // APPROVED FIRST
+              ListTile(
+          
+                leading: const Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                ),
+          
+                title: const Text("Approved First"),
+          
+                onTap: () {
+          
+                  vm.allPersons.sort(
+                    (a, b) => a.status.compareTo(b.status),
+                  );
+          
+                  vm.notifyListeners();
+          
+                  Navigator.pop(context);
+                },
+              ),
+          
+              // DELETE OPTION
+              ListTile(
+          
+                leading: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+          
+                title: const Text("Delete Applications"),
+          
+                onTap: () {
+          
+                  Navigator.pop(context);
+          
+                  showDialog(
+                    context: context,
+          
+                    builder: (dialogContext) {
+          
+                      return AlertDialog(
+          
+                        title: const Text(
+                          "Delete Application",
+                        ),
+          
+                        content: SizedBox(
+                          width: double.maxFinite,
+                          height: 300,
+          
+                          child: ListView.builder(
+          
+                            itemCount: vm.allPersons.length,
+          
+                            itemBuilder: (context, index) {
+          
+                              final student =
+                                  vm.allPersons[index];
+          
+                              return ListTile(
+          
+                                title: Text(
+                                  student.course,
+                                ),
+          
+                                subtitle: Text(
+                                  "${student.name} ${student.surname}",
+                                ),
+          
+                                trailing: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+          
+                                onTap: () async {
+          
+                                  Navigator.pop(dialogContext);
+          
+                                  await vm.deleteStudent(
+                                    student.id!,
+                                  );
+          
+                                  if (mounted) {
+          
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Application Deleted",
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ),
+          
+                        actions: [
+          
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(dialogContext);
+                            },
+          
+                            child: const Text("Close"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
   void _confirmDelete(BuildContext context, StudentApplication student) {
     
