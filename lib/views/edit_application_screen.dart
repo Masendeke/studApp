@@ -3,9 +3,12 @@
 //224125791 Khunyeli P
 //224081629 Ntlati TT
 //224083089 Tshabane L
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:student_assistant_application/model/model.dart';
+import 'package:student_assistant_application/viewmodel/viewmodel.dart';
 
 class EditApplicationScreen extends StatefulWidget {
   final StudentApplication app;
@@ -186,7 +189,7 @@ class _EditApplicationScreenState
                     ),
                   ),
 
-                  onPressed: () {
+                  onPressed: () async {
                     final updated = StudentApplication(
                       id: widget.app.id,
                       stdNo: _studNoController.text,
@@ -203,7 +206,19 @@ class _EditApplicationScreenState
                       updatedAt: DateTime.now(),
                     );
 
-                    Navigator.pop(context, updated);
+                    final vm = context.read<StudentViewModel>();
+                    final success = await vm.updateStudent(updated);
+
+                    if (success && mounted){
+                      Navigator.pop(context, updated);
+                    } else {
+                      Text('failed to update');
+                    }
+
+                    
+
+
+
                   },
 
                   child: const Text(

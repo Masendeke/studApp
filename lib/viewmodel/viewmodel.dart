@@ -3,8 +3,6 @@
 //224125791 Khunyeli P
 //224081629 Ntlati TT
 //224083089 Tshabane L
-
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:student_assistant_application/services/supabase_services.dart';
@@ -15,11 +13,10 @@ import '../model/model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class StudentViewModel extends ChangeNotifier {
   final SupabaseService _supabaseService = SupabaseService();
   final StorageService _storageService = StorageService();
-  
+
   // Form controllers
   final formKey = GlobalKey<FormState>();
   final stdNo = TextEditingController();
@@ -35,7 +32,7 @@ class StudentViewModel extends ChangeNotifier {
   List<StudentApplication> searchResults = [];
   String _query = '';
   StudentApplication? selectedPerson;
-  
+
   // State
   bool isLoading = false;
   String? errorMessage;
@@ -43,7 +40,7 @@ class StudentViewModel extends ChangeNotifier {
   bool isUploading = false;
 
   //  DATA METHODS (Call SupabaseService)
-  
+
   Future<void> fetchAllStudents() async {
     isLoading = true;
     notifyListeners();
@@ -104,23 +101,69 @@ class StudentViewModel extends ChangeNotifier {
         'updated_at': now.toIso8601String(),
       };
 
-      
-    await _supabaseService.addStudent(data); 
-    await fetchAllStudents();
-    return true;
-  } catch (e) {
-    errorMessage = e.toString();
-    return false;
-  } finally {
-    isLoading = false;
-    notifyListeners();
+      await _supabaseService.addStudent(data);
+
+      await fetchAllStudents();
+      final user1 = Supabase.instance.client.auth.currentUser;
+      if (user1 != null) {
+        await fetchUserStudents(user1.id);
+      }
+
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
-}
+
+  Future<bool> updateStudent(StudentApplication updatedStudent) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final now = DateTime.now();
+      final updateData = {
+        'std_no': updatedStudent.stdNo,
+        'name': updatedStudent.name,
+        'surname': updatedStudent.surname,
+        'email': updatedStudent.email,
+        'course': updatedStudent.course,
+        'year_of_study': updatedStudent.yearOfStudy,
+        'module1': updatedStudent.module1,
+        'module2': updatedStudent.module2,
+        'phone': updatedStudent.phone,
+        'updated_at': now.toIso8601String(),
+      };
+
+      await _supabaseService.updateStudent(updatedStudent.id!, updateData);
+
+      final user = Supabase.instance.client.auth.currentUser;
+      if (user != null) {
+        await fetchUserStudents(user.id);
+      }
+
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> deleteStudent(String id) async {
     try {
       await _supabaseService.deleteStudent(id);
-      await fetchAllStudents();
+
+      final user = Supabase.instance.client.auth.currentUser;
+      if (user != null) {
+        await fetchUserStudents(user.id);
+      }
     } catch (e) {
       errorMessage = e.toString();
       notifyListeners();
@@ -151,8 +194,8 @@ class StudentViewModel extends ChangeNotifier {
     await fetchAllStudents();
   }
 
-  // IMAGE METHODS (Call StorageService) 
-  
+  // IMAGE METHODS (Call StorageService)
+
   Future<void> pickImage(ImageSource source) async {
     final image = await StorageService.pickImage(source);
     if (image != null) {
@@ -163,12 +206,15 @@ class StudentViewModel extends ChangeNotifier {
 
   Future<String?> uploadProfilePicture(String studentId) async {
     if (selectedImage == null) return null;
-    
+
     isUploading = true;
     notifyListeners();
-    
+
     try {
-      final imageUrl = await _storageService.uploadProfilePicture(studentId, selectedImage!);
+      final imageUrl = await _storageService.uploadProfilePicture(
+        studentId,
+        selectedImage!,
+      );
       return imageUrl;
     } catch (e) {
       errorMessage = e.toString();
@@ -179,19 +225,22 @@ class StudentViewModel extends ChangeNotifier {
     }
   }
 
-  //  SEARCH METHODS 
-  
+  //  SEARCH METHODS
+
   void search(String query) {
     _query = query;
     if (_query.isEmpty) {
       searchResults = allPersons;
     } else {
-      searchResults = allPersons.where((person) =>
-        person.name.toLowerCase().contains(_query.toLowerCase()) ||
-        person.surname.toLowerCase().contains(_query.toLowerCase()) ||
-        person.email.toLowerCase().contains(_query.toLowerCase()) ||
-        person.stdNo.toLowerCase().contains(_query.toLowerCase())
-      ).toList();
+      searchResults = allPersons
+          .where(
+            (person) =>
+                person.name.toLowerCase().contains(_query.toLowerCase()) ||
+                person.surname.toLowerCase().contains(_query.toLowerCase()) ||
+                person.email.toLowerCase().contains(_query.toLowerCase()) ||
+                person.stdNo.toLowerCase().contains(_query.toLowerCase()),
+          )
+          .toList();
     }
     notifyListeners();
   }
@@ -211,13 +260,14 @@ class StudentViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // COUNTERS 
-  
+  // COUNTERS
+
   int get totalStudentCount => allPersons.length;
   int get pendingCount => allPersons.where((p) => p.status == 'Pending').length;
-  int get approvedCount => allPersons.where((p) => p.status == 'Approved').length;
-  int get rejectedCount => allPersons.where((p) => p.status == 'Rejected').length;
-
+  int get approvedCount =>
+      allPersons.where((p) => p.status == 'Approved').length;
+  int get rejectedCount =>
+      allPersons.where((p) => p.status == 'Rejected').length;
 
   Color getStatusColor(String status) {
     switch (status) {
