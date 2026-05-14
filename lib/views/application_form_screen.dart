@@ -1,8 +1,11 @@
-/*
-*Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
-*Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
-*Question : Applicationformscreen 
-*/
+//224043099 Masendeke CP
+//224014647 Mahlangu P
+//224125791 Khunyeli P
+//224081629 Ntlati TT
+//224083089 Tshabane L
+
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -33,34 +36,7 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
   bool eligibilityConfirmed = false;
   bool isSubmitting = false;
 
-  Future<void> pickFile() async {
-    FilePickerResult? result =
-        await FilePicker.pickFiles();
-
-    if (result != null) {
-      setState(() {
-        selectedFileName = result.files.single.name;
-      });
-    }
-  }
-
-  final List<String> years = [
-    'First Year',
-    'Second Year',
-    'Third Year'
-  ];
-
-  final List<String> academicLevels = [
-    'First Year',
-    'Second Year',
-    'Third Year',
-  ];
-
-  final Map<String, List<String>> modulesByLevel = {
-    'First Year': ['ICT101', 'TPG111', 'MAT101'],
-    'Second Year': ['TPG211', 'DBS210', 'WPR221'],
-    'Third Year': ['TPG316C', 'PRJ300', 'SEC310'],
-  };
+  final List<String> years = ['First Year', 'Second Year', 'Third Year'];
 
   @override
   void dispose() {
@@ -74,7 +50,8 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
     module2.dispose();
     super.dispose();
   }
- 
+
+  // ✅ Validation helper methods
   String? validateStudentNumber(String? value) {
     if (value == null || value.isEmpty) {
       return 'Student number is required';
@@ -148,7 +125,7 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
   }
 
   Future<void> submitApplication() async {
-  
+    // ✅ Check form validation first
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -209,7 +186,7 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
     if (!mounted) return;
 
     if (success) {
-      // Refresh only current user's data
+      // ✅ Refresh only current user's data
       final userId = Supabase.instance.client.auth.currentUser?.id;
       if (userId != null) {
         await vm.fetchUserStudents(userId);
