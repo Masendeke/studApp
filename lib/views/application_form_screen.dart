@@ -1,11 +1,10 @@
-//224043099 Masendeke CP
-//224014647 Mahlangu P
-//224125791 Khunyeli P
-//224081629 Ntlati TT
-//224083089 Tshabane L
 
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
-
+/*
+*Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
+*Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
+*Question : Applicationformscreen 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -50,8 +49,7 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
     module2.dispose();
     super.dispose();
   }
-
-  // ✅ Validation helper methods
+ 
   String? validateStudentNumber(String? value) {
     if (value == null || value.isEmpty) {
       return 'Student number is required';
@@ -125,7 +123,7 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
   }
 
   Future<void> submitApplication() async {
-    // ✅ Check form validation first
+  
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -186,7 +184,7 @@ class _ApplicationformscreenState extends State<Applicationformscreen> {
     if (!mounted) return;
 
     if (success) {
-      // ✅ Refresh only current user's data
+      // Refresh only current user's data
       final userId = Supabase.instance.client.auth.currentUser?.id;
       if (userId != null) {
         await vm.fetchUserStudents(userId);

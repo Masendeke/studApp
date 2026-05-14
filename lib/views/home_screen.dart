@@ -1,9 +1,10 @@
-//224043099 Masendeke CP
-//224014647 Mahlangu P
-//224125791 Khunyeli P
-//224081629 Ntlati TT
-//224083089 Tshabane L
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
+/*
+*Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
+*Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
+*Question : Homescreen 
+*/
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:student_assistant_application/viewmodel/auth_viewmodel.dart';
