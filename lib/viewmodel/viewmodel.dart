@@ -71,53 +71,78 @@ class StudentViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> addStudent(StudentApplication student) async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners();
+  Future<bool> addStudent(
+    StudentApplication student,
+) async {
 
-    try {
-      final user = Supabase.instance.client.auth.currentUser;
+  isLoading = true;
 
-      if (user == null) {
-        errorMessage = "User not logged in";
-        return false;
-      }
+  errorMessage = null;
 
-      final now = DateTime.now();
-      final data = {
-        'user_id': user.id,
-        'std_no': student.stdNo,
-        'name': student.name,
-        'surname': student.surname,
-        'email': student.email,
-        'course': student.course,
-        'year_of_study': student.yearOfStudy,
-        'module1': student.module1,
-        'module2': student.module2,
-        'status': 'Pending',
-        'phone': student.phone,
-        'created_at': now.toIso8601String(),
-        'updated_at': now.toIso8601String(),
-      };
+  notifyListeners();
 
-      await _supabaseService.addStudent(data);
+  try {
 
-      await fetchAllStudents();
-      final user1 = Supabase.instance.client.auth.currentUser;
-      if (user1 != null) {
-        await fetchUserStudents(user1.id);
-      }
+    final user =
+        Supabase.instance.client.auth.currentUser;
 
-      return true;
-    } catch (e) {
-      errorMessage = e.toString();
+    if (user == null) {
+
+      errorMessage = "User not logged in";
+
       return false;
-    } finally {
-      isLoading = false;
-      notifyListeners();
     }
+
+    await Supabase.instance.client
+        .from('student_applications')
+        .insert({
+
+      'user_id': user.id,
+
+      'std_no': student.stdNo,
+
+      'name': student.name,
+
+      'surname': student.surname,
+
+      'email': student.email,
+
+      'phone': student.phone,
+
+      'course': student.course,
+
+      'year_of_study':
+          student.yearOfStudy,
+
+      'module1': student.module1,
+
+      'module2': student.module2,
+
+      'status': student.status,
+    });
+
+    // Refresh both student and admin data
+    await fetchAllStudents();  // Refresh admin dashboard data
+    
+    // Also refresh current user's data
+      await fetchUserStudents(user.id);
+    
+
+    return true;
+
+  } catch (e) {
+
+    errorMessage = e.toString();
+
+    return false;
+
+  } finally {
+
+    isLoading = false;
+
+    notifyListeners();
   }
+}
 
   Future<bool> updateStudent(StudentApplication updatedStudent) async {
     isLoading = true;

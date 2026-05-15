@@ -1,7 +1,7 @@
 /*
 *Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
 *Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
-*Question :StudentModel
+*Question : StudentModel 
 */
 class StudentApplication {
   final String? id;
@@ -16,6 +16,8 @@ class StudentApplication {
   final String course;
   final String status;
   final String phone;
+
+  final String? documentUrl;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -32,6 +34,7 @@ class StudentApplication {
     required this.module2,
     required this.course,
     this.status = 'Pending',
+    this.documentUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -48,6 +51,7 @@ class StudentApplication {
     'module2': module2,
     'status': status,
     'phone': phone,
+    'document_url': documentUrl,
     'created_at': createdAt?.toIso8601String(),
     'updated_at': updatedAt?.toIso8601String(),
   };
@@ -66,6 +70,7 @@ class StudentApplication {
       course: json['course'] ?? '',
       status: json['status'] ?? 'Pending',
       phone: json['phone'] ?? '',
+      documentUrl: json['document_url'],
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
     );
