@@ -1,7 +1,7 @@
 /*
 *Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
 *Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
-*Question :AdminLoginScreen 
+*Question : AdminLoginScreen 
 */
 import 'package:flutter/material.dart';
 import 'admin_dashboard_screen.dart';
@@ -112,24 +112,18 @@ class _AdminLoginScreenState
 
                   children: [
 
-                    SizedBox(
-
-                      height: 75,
-                      width: 75,
-
-                      child: CircleAvatar(
-
-                        child: ClipOval(
-
-                          child: Image.asset(
-
-                            "assets/logo.png",
-
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                   Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(40),
+                      image: const DecorationImage(
+                        image: AssetImage("assets/logo.png"),
+                        fit: BoxFit.cover,
                       ),
                     ),
+                  ),
 
                     const SizedBox(width: 12),
 

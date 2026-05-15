@@ -1,7 +1,7 @@
 /*
 *Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
 *Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
-*Question : AdmindashboardScreen 
+
 */
 // ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';

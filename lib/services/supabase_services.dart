@@ -1,7 +1,7 @@
 /*
 *Student Numbers:224043099, 224014647, 224125791, 224081629, 224083089
 *Student Names  : Masendeke Chiedza P, Mahlangu Phindile, Khunyeli Paballo, Ntlati Thembinkosi T, Tshabane Lonwabo
-*Question :SupabaseService
+*Question : SupabaseService 
 */
 // Database operations for Supabase
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,7 +9,7 @@ import '../model/model.dart';
 
 class SupabaseService {
   final SupabaseClient _supabase = Supabase.instance.client;
-  static const String _tableName = 'students';
+  static const String _tableName = 'student_applications';
 
   //  READ all students (for Admin) 
   Future<List<StudentApplication>> fetchAllStudents() async {
